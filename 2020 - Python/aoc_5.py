@@ -4,29 +4,54 @@ from helpers.helpers import read_input
 
 input = read_input("aoc_5_input.txt", '\n')
 
+
 def parse_row(row_data):
-    min_range = 0
-    max_range = 127
-
+    rows = list(range(128))
     for char in row_data:
-        if char == "F":
-            max_range = math.floor(max_range / 2)
-            print("Max: {}".format(max_range))
         if char == "B":
-            min_range = math.floor(max_range / 2)
-            print("Min: {}".format(min_range))
-    print("Final Min: {}".format(min_range))
-    print("Final Max: {}".format(max_range))
+            rows = rows[round(len(rows) / 2):]
+        if char == "F":
+            rows = rows[:round(len(rows) / 2)]
+    return rows[0]
 
+def parse_column(column_data):
+    rows = list(range(8))
+    for char in column_data:
+        if char == "R":
+            rows = rows[round(len(rows) / 2):]
+        if char == "L":
+            rows = rows[:round(len(rows) / 2)]
+    return rows[0]
 
+def calculate_seat_id(row, column):
+    return row * 8 + column
 
+highest_seat_id = 0
+seat_ids = []
 
 for seat in input:
     row_data = seat[0:7]
-    row_data = "FBFBBFFRLR"
-    seat_data = seat[7:10]
-    print(row_data)
-    print(seat_data)
-    parse_row(row_data)
+    column_data = seat[7:10]
+    row = parse_row(row_data)
+    column = parse_column(column_data)
+    seat_id = calculate_seat_id(row, column)
+    seat_ids.append(seat_id)
+    if highest_seat_id < seat_id:
+        highest_seat_id = seat_id
+print("Result 1: {}".format(highest_seat_id))
 
-    exit()
+
+seat_ids.sort()
+
+found_seat_id = 0
+last_seat_id = seat_ids[0] - 1
+
+for seat_id in seat_ids:
+    if not (seat_id + 1 == last_seat_id or seat_id - 1 == last_seat_id):
+        found_seat_id = seat_id
+        break
+    last_seat_id = seat_id
+
+print("Result 2: {}".format(found_seat_id - 1))
+
+
