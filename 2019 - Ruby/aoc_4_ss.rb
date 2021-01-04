@@ -17,22 +17,11 @@ def check_for_double_extended(number)
     has_single_double = true if char == number.to_s[index + 1]
     has_single_double = false if char == number.to_s[index + 2]
     has_single_double = false if char == number.to_s[index - 1]
-    # puts '--------------------------'
-    # puts "Index - 1: #{number.to_s[index - 1]}"
-    # puts "Original: #{char}"
-    # puts "Index + 1: #{number.to_s[index + 1]}"
-    # puts "Index + 2: #{number.to_s[index + 2]}"
     pointer = char
     return true if has_single_double
   end
   has_single_double
 end
-
-
-# puts check_for_double_extended(112_233)
-# puts check_for_double_extended(111_111)
-# puts check_for_double_extended(111_122)
-# abort
 
 def check_for_low_to_high(number)
   pointer = 0

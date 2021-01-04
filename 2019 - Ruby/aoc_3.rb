@@ -5,62 +5,112 @@
   %w[L998 U242 R333 U631 L507 U313 R286 U714 R709 U585 R393 D893 R404 D448 R882 U246 L190 U238 R672 D184 L275 D120 R352 D584 L626 U413 L288 D942 R770 D551 L926 D242 R568 U48 R108 D349 R750 D323 L529 D703 L672 U775 L700 D465 L528 D596 R990 U366 L747 D270 L723 D469 L548 D47 L873 D678 R782 D187 L397 U975 R967 D224 L295 D86 L159 U610 L767 U641 L885 D623 L160 D509 R517 D981 L376 D604 R251 D140 L938 D358 L984 U63 R513 D54 L718 U90 L343 D982 L575 D692 L508 D361 L297 D880 L46 D875 R40 D97 R819 U919 R319 U152 R161 U553 L388 D100 R481 U306 L201 U706 L173 D657 L632 D182 R477 D332 R678 D683 L983 D584 R941 U801 R485 D376 R218 D432 R780 D617 R560 D618 R466 U456 L952 D72 R339 U16 L543 U176 L423 D770 L714 U621 L850 U929 R132 D908 R993 U440 R539 U374 L945 D443 L326 D651 L269 U321 R925 D777 R431 U273 R811 D63 R683 D540 L3 D617 R359 U332 L736 D98 L859 D994 R131 U71 L156 D661 R879 D303 L581 U407 L166 U878 L831 D871 R953 D137 L903 U200 R34 D857 R448 D412 L311 D212 R527 D707 R641 D775 L987 D814 L38 D96 R647 U868 L98 U882 L838 D308 R840 U161 R83 U424 L420 U934 R353 D287 R559 D665 R695 D888 R859 U992 L283 D525 L449 U255 L889 D296 R72 D899 R316 D3 L308 D404 L356 D333 R645 U274 R336 U258 R599 U746 L142 U21 R301 D890 L290 D624 R565 U117 L927 U412 L687 U480 R674 U372 L382 D134 L372 D892 R307 U217 L20 D535 L876 D548 L19 U590 R906 D816 R465 U768 R882 U980 L557 D788 R645 U684 L255 D803 L374 U759 L693 D92 L256 U772 R591 D126 R57 U363 R347 U191 L760 U223 R591 D507 R232 U251 R471 D912 R227]
 ]
 
-# test wires for smaller thing
-@wires = [
-  %w[
-    R75 D30 R83 U83 L12 D49 R71 U7 L72
-    U62 R66 U55 R34 D71 R55 D58 R83
-  ],
-  %w[
-    R98 U47 R26 D63 R33 U87 L62 D20 R33 U53 R51
-    U98 R91 D20 R16 D67 R40 U7 R15 U6 R7
-  ]
-]
+# @wires = [
+#   %w[R98 U47 R26 D63 R33 U87 L62 D20 R33 U53 R51],
+#   %w[U98 R91 D20 R16 D67 R40 U7 R15 U6 R7]
+# ]
+
+# @wires = [
+#   %w[R8 U5 L5 D3],
+#   %w[U7 R6 D4 L4]
+# ]
 
 @grid = Hash.new('.')
 
-@current_pos = [0, 0]
-
-def set_grid_position(horizontal, vertical, char)
-  char = 'X' if @grid[[horizontal, vertical]] != '.'
-  @grid[[horizontal, vertical]] = char
-  [horizontal, vertical, char]
-end
-
-def print_grid
-  (0..2000).to_a.product([2]).collect { |index| puts @grid[index] }
-end
-
-def run_wire(command)
-  case command[0]
-  when 'R'
-    (1..command[1..99].to_i).each do |_index|
-      @current_pos[0] += 1
-      return set_grid_position(@current_pos[0], @current_pos[1], '-')
-    end
-  when 'L'
-    (1..command[1..99].to_i).each do |_index|
-      @current_pos[0] -= 1
-      return set_grid_position(@current_pos[0], @current_pos[1], '-')
-    end
-  when 'U'
-    (1..command[1..99].to_i).each do |_index|
-      @current_pos[1] += 1
-      return set_grid_position(@current_pos[0], @current_pos[1], '-')
-    end
-  when 'D'
-    (1..command[1..99].to_i).each do |_index|
-      @current_pos[1] -= 1
-      return set_grid_position(@current_pos[0], @current_pos[1], '-')
-    end
-  end
-end
-
 @grid[[0, 0]] = 'O'
 
-@wires.each do |wire|
-  wire.each do |command|
-    output = run_wire(command)
-    puts "x: #{output[0]} y: #{output[1]}" if output[2] == 'X'
+@size = 2_500
+
+@current_pos = [0, 0]
+
+def set_grid_position(horizontal, vertical, char, _index)
+  return if char == 'O'
+
+  if @grid[[horizontal, vertical]] != '.' &&
+     @grid[[horizontal, vertical]] != '-' &&
+     @grid[[horizontal, vertical]] != '['
+    char = 'X'
+  end
+  @grid[[horizontal, vertical]] = char
+end
+
+def run_wire(command, index)
+  case command[0]
+  when 'R'
+    run_direction(0, -1, command, index)
+  when 'L'
+    run_direction(0, 1, command, index)
+  when 'U'
+    run_direction(1, 1, command, index)
+  when 'D'
+    run_direction(1, -1, command, index)
   end
 end
+
+# direction on grid
+# amount can be -1 or 1
+# command for the amount of lines to draw
+def run_direction(direction, amount, command, index)
+  range = command[1..99].to_i
+  (1..range).each do |current_cell|
+    @current_pos[direction] += amount
+    set_grid_position(@current_pos[0], @current_pos[1], parse_symbol(current_cell, range, direction, index), index)
+  end
+end
+
+def parse_symbol(current_cell, range, direction, index)
+  symbol = '[' if direction.zero? && index.zero?
+  symbol = '-' if !direction.zero? && index.zero?
+  symbol = ']' if direction.zero? && !index.zero?
+  symbol = '_' if !direction.zero? && !index.zero?
+  symbol = '+' if range == current_cell
+  symbol
+end
+
+def print_grid(grid)
+  (-@size..@size).each do |x|
+    (-@size..@size).each do |y|
+      print grid[[x, y]]
+    end
+    puts
+  end
+end
+
+def write_to_file
+  out_file = File.new('grid.txt', 'w')
+  (-@size..@size).each do |x|
+    (-@size..@size).each do |y|
+      out_file.print(@grid[[x, y]])
+    end
+    out_file.puts
+  end
+  out_file.close
+end
+
+def find_marks
+  found = @grid.select { |_key, hash| hash == 'X' }
+  puts 'Done finding all X marks'
+  closest_mark(found)
+end
+
+def closest_mark(found)
+  previous_mark = [found.first.first[0], found.first.first[1]]
+  found.each do |cords|
+    if previous_mark[0].abs > cords.first[0].abs && previous_mark[1].abs > cords.first[1].abs
+      previous_mark = cords.first
+    end
+  end
+  puts 'Final answer for question is:'
+  puts "#{previous_mark[0].abs} + #{previous_mark[1].abs} = #{previous_mark[0].abs + previous_mark[1].abs}"
+end
+
+@wires.each.with_index do |wire, index|
+  @current_pos = [0, 0]
+  wire.each do |command|
+    run_wire(command, index)
+  end
+end
+puts 'Done parsing lines'
+
+# write_to_file
+find_marks
