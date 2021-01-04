@@ -1,7 +1,9 @@
 # Advent Of Code
 My takes on the Advent of Code calendar each year.
 
-## Beginning
+## Years
+- 2020 - Python
 - 2019 - Ruby
 
-_s or _ss in the filename means that I have reveived one or two stars for that day
+### Disclaimer
+Al the code is free, so yoink while you can 🐷
