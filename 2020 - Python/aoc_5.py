@@ -1,5 +1,3 @@
-import math
-
 from helpers.helpers import read_input
 
 input = read_input("aoc_5_input.txt", '\n')
