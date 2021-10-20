@@ -1,6 +1,6 @@
 def read_input(file_name, char = "\n"):
-    input = []
+    read_lines = []
     with open(file_name, "r") as file:
-        input = file.read().split(char)
-        print("Lines read from input: ".format(len(input)))
-        return input
+        read_lines = file.read().split(char)
+        print("Lines read from input file: {}".format(len(read_lines)))
+        return read_lines

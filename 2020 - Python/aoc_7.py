@@ -1,5 +1,5 @@
 from helpers.helpers import read_input
-input = read_input("aoc_7_test.txt", '\n')
+input = read_input("input_files/aoc_7_test.txt", '\n')
 
 
 class Tree:

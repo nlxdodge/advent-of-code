@@ -1,6 +1,6 @@
 from helpers.helpers import read_input
 
-input = read_input("aoc_5_input.txt", '\n')
+input = read_input("input_files/aoc_5_input.txt", '\n')
 
 
 def parse_row(row_data):

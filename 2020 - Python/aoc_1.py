@@ -1,6 +1,6 @@
 from helpers.helpers import read_input
 
-input = read_input("aoc_1_input.txt")
+input = read_input("input_files/aoc_1_input.txt")
 input = list(map(int, input))
 
 found = False

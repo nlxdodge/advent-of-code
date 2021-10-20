@@ -1,5 +1,5 @@
 from helpers.helpers import read_input
-input = read_input("aoc_6_input.txt", '\n\n')
+input = read_input("input_files/aoc_6_input.txt", '\n\n')
 
 yes_answers = list()
 for answers in input:

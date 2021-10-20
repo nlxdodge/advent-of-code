@@ -1,6 +1,6 @@
 # Advent of code year 2020
 
-Now made in python, instead of Ruby.
+This year instead of going with Ruby or Java for example I wanted to iron out my skills with python.
 
 1. ⭐⭐
 1. ⭐⭐
@@ -9,8 +9,8 @@ Now made in python, instead of Ruby.
 1. ⭐⭐
 1. ⭐⭐
 1. 
-1. 
-1. 
+1. ⭐
+1. ⭐⭐
 1. 
 1. 
 1. 

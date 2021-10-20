@@ -1,7 +1,6 @@
 from helpers.helpers import read_input
 
-input = read_input("aoc_2_input.txt")
-
+input = read_input("input_files/aoc_2_input.txt")
 
 def is_correct(rule, password):
     char = rule.split(" ")[1]
