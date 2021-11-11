@@ -1,19 +1,20 @@
-package aoc1;
+package nl.nlxdodge.aoc1;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-import javax.management.relation.RoleNotFoundException;
-
-class Aoc1 {
+class AOC1 {
+    private static final String LOGGER = "AOC1";
     private static final String FILE_PATH = "./aoc1/input.txt";
 
     public static void main(String[] args) throws IOException {
-        Integer rounds = 0;
+        int rounds = 0;
         Frequency frequency = new Frequency();
 
         while (!frequency.hasDuplicate()) {
@@ -22,10 +23,10 @@ class Aoc1 {
                 stream.forEach(frequency::runCommand);
             }
             if (rounds == 1) {
-                System.out.println(String.format("Result 1: %s", frequency.getFrequency()));
+                Logger.getLogger(LOGGER).log(Level.INFO, "Result 1: {0}", frequency.getFrequency());
             }
         }
-        System.out.println(String.format("Result 2: %s", frequency.getFrequency()));
+        Logger.getLogger(LOGGER).log(Level.INFO, "Result 2: {0}", frequency.getFrequency());
     }
 
 }
@@ -50,7 +51,7 @@ class Frequency {
      */
     public void runCommand(String command) {
         String operator = command.substring(0, 1);
-        Integer amount = Integer.parseInt(command.substring(1, command.length()));
+        int amount = Integer.parseInt(command.substring(1, command.length()));
         switch (operator) {
         default:
         case "+":
