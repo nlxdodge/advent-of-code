@@ -10,8 +10,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 class AOC1 {
-    private static final String LOGGER = "AOC1";
-    private static final String FILE_PATH = "./aoc1/input.txt";
+    private static final String FILE_PATH = "./nl/nlxdodge/aoc1/input.txt";
 
     public static void main(String[] args) throws IOException {
         int rounds = 0;
@@ -23,10 +22,10 @@ class AOC1 {
                 stream.forEach(frequency::runCommand);
             }
             if (rounds == 1) {
-                Logger.getLogger(LOGGER).log(Level.INFO, "Result 1: {0}", frequency.getFrequency());
+                Logger.getGlobal().info(() -> String.format("Result 1: %s", frequency.getFrequency()));
             }
         }
-        Logger.getLogger(LOGGER).log(Level.INFO, "Result 2: {0}", frequency.getFrequency());
+        Logger.getGlobal().info(() -> String.format("Result 2: %s", frequency.getFrequency()));
     }
 
 }
@@ -44,11 +43,6 @@ class Frequency {
         return foundDuplicate;
     }
 
-    /**
-     * When running a command add that to the frequency and hitlist
-     * 
-     * @param command
-     */
     public void runCommand(String command) {
         String operator = command.substring(0, 1);
         int amount = Integer.parseInt(command.substring(1, command.length()));
@@ -70,11 +64,6 @@ class Frequency {
         frequenciesHitList.add(frequency);
     }
 
-    /**
-     * Checks if the current frequency already overlaps
-     * 
-     * @return
-     */
     public boolean doesOverlap() {
         return frequenciesHitList.contains(frequency);
     }

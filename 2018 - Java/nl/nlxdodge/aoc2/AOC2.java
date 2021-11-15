@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public class AOC2 {
 
     public static void main(String[] args) throws IOException {
-        final String FILE_PATH = "./aoc2/input.txt";
+        final String FILE_PATH = "./nl/nlxdodge/aoc2/input.txt";
 
         long doubles = 0L;
         long triples = 0L;
@@ -26,12 +26,12 @@ public class AOC2 {
             triples = checkSums.stream().filter(checksum -> checksum.hasAtLeastOneOfCount(3)).count();
             long result1 = doubles * triples;
 
-            Logger.getGlobal().log(Level.INFO, () -> String.format("Result 1: %d", result1));
+            Logger.getGlobal().info(() -> String.format("Result 1: %d", result1));
 
             checkSums.forEach(checkSum -> checkSums.forEach(checkSumSub -> {
                 Optional<String> result2 = checkSumSub.isOneOff(checkSum);
                 if (result2.isPresent()) {
-                    Logger.getGlobal().log(Level.INFO, () -> String.format("Result 2: %s", result2.get()));
+                    Logger.getGlobal().info(() -> String.format("Result 2: %s", result2.get()));
                 }
             }));
 

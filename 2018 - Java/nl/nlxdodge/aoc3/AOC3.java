@@ -12,8 +12,7 @@ import java.util.stream.Stream;
 
 public class AOC3 {
     public static void main(String[] args) throws IOException {
-        final String LOGGER = "AOC3";
-        final String FILE_PATH = "./aoc3/input.txt";
+        final String FILE_PATH = "./nl/nlxdodge/aoc3/input.txt";
 
         Fabric fabric = new Fabric(1000);
 
@@ -21,15 +20,16 @@ public class AOC3 {
             stream.forEach(elfLine -> convertElfLine(elfLine, fabric, true));
 
             // check all matches that have more then 2 claims starstar star
-            Logger.getLogger(LOGGER).log(Level.INFO, "Result 1: {0}", fabric.checkDoubleHits());
+            Logger.getGlobal().log(Level.INFO, () -> String.format("Result 1: %s", fabric.checkDoubleHits()));
         }
-        
+
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
-            List<Integer> nonOverlapping = stream.map(elfLine -> convertElfLine(elfLine, fabric, false)).filter(id -> id != -1)
-            .collect(Collectors.toList());
-            
+            List<Integer> nonOverlapping = stream.map(elfLine -> convertElfLine(elfLine, fabric, false))
+                    .filter(id -> id != -1).collect(Collectors.toList());
+
             // when we got overlap list check again if it overlaps
-            Logger.getLogger(LOGGER).log(Level.INFO, "Result 2: {0}", nonOverlapping.get(nonOverlapping.size() - 1));
+            Logger.getGlobal().log(Level.INFO,
+                    () -> String.format("Result 2: %s", nonOverlapping.get(nonOverlapping.size() - 1)));
         }
 
     }
@@ -46,7 +46,7 @@ public class AOC3 {
         int corX = Integer.parseInt(coordinates[0]);
         int corY = Integer.parseInt(coordinates[1]);
 
-        if(mark) {
+        if (mark) {
             fabric.markFabric(padX, padY, corX, corY);
             return -1;
         } else {
