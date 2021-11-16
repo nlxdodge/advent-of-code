@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC4 {
-
     private static Guard currentGuard;
     private static List<Guard> guards = new ArrayList<>();
 

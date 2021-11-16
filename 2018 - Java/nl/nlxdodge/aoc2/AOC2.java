@@ -7,13 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AOC2 {
-
     public static void main(String[] args) throws IOException {
         final String FILE_PATH = "./nl/nlxdodge/aoc2/input.txt";
 
