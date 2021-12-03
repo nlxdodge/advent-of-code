@@ -14,8 +14,6 @@ public class AOC3 {
     private static final String FILE_PATH = "./nl/nlxdodge/aoc3/input.txt";
 
     public static void main(String[] args) throws IOException {
-        
-
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> l = stream.toList();
 
