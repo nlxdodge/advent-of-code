@@ -1,16 +1,10 @@
 package nl.nlxdodge.aoc3;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC3 {
@@ -26,14 +20,22 @@ public class AOC3 {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> l = stream.toList();
 
-            mostSignificant = mostSignificantBits(l.size(), parseInputToMap(l));
-            leastSignificant = leastSignificantBits(l.size(), parseInputToMap(l));
+            StringBuilder mostSB = new StringBuilder();
+            StringBuilder leastSB = new StringBuilder();
+
+            for (int i = 0; i < l.get(0).length(); i++) {
+                mostSB.append(mostSignificantBits(l, i));
+                leastSB.append(leastSignificantBits(l, i));
+            }
+
+            mostSignificant = mostSB.toString();
+            leastSignificant = leastSB.toString();
 
             List<String> newList = new ArrayList<>(l);
             for (int i = 0; i < l.get(0).length(); i++) {
-                String newBit = mostSignificantBits(newList.size(), parseInputToMap(newList));
+                char newBit = mostSignificantBits(newList, i);
                 for (String line : l) {
-                    if (line.charAt(i) != newBit.charAt(i) && newList.size() != 1) {
+                    if (line.charAt(i) != newBit && newList.size() != 1) {
                         newList.remove(line);
                     }
                 }
@@ -42,9 +44,9 @@ public class AOC3 {
 
             newList = new ArrayList<>(l);
             for (int i = 0; i < l.get(0).length(); i++) {
-                String newBit = leastSignificantBits(newList.size(), parseInputToMap(newList));
+                char newBit = leastSignificantBits(newList, i);
                 for (String line : l) {
-                    if (line.charAt(i) != newBit.charAt(i) && newList.size() != 1) {
+                    if (line.charAt(i) != newBit && newList.size() != 1) {
                         newList.remove(line);
                     }
                 }
@@ -55,47 +57,47 @@ public class AOC3 {
         int result1 = Integer.parseInt(mostSignificant, 2) * Integer.parseInt(leastSignificant, 2);
         int result2 = Integer.parseInt(oxygen, 2) * Integer.parseInt(co2Scrubber, 2);
 
-        Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-        Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+        System.out.println("result1 = " + result1);
+        System.out.println("result2 = " + result2);
     }
 
-    public static String mostSignificantBits(int inputSize, Map<Integer, Integer> numbers) {
-        StringBuilder most = new StringBuilder();
-        for (Integer count : numbers.values()) {
-            Integer splitLen = inputSize / 2;
-            most.append(count >= splitLen ? "1" : "0");
-        }
-        return most.toString();
-    }
+    public static char mostSignificantBits(List<String> list, int index) {
+        int zeros = 0;
+        int ones = 0;
 
-    public static String leastSignificantBits(int inputSize, Map<Integer, Integer> numbers) {
-        StringBuilder least = new StringBuilder();
-        for (Integer count : numbers.values()) {
-            Integer splitLen = inputSize / 2;
-            if(inputSize == 2) {
-                least.append("0");
-            } else {
-                least.append(count <= splitLen ? "1" : "0");
+        for (String line : list) {
+            if (line.charAt(index) == '0') {
+                zeros++;
+            }
+            if (line.charAt(index) == '1') {
+                ones++;
             }
         }
-        return least.toString();
+
+        if (zeros > ones) {
+            return '0';
+        } else {
+            return '1';
+        }
     }
 
-    public static Map<Integer, Integer> parseInputToMap(List<String> inputArray) {
-        Map<Integer, Integer> numbers = new HashMap<>();
+    public static char leastSignificantBits(List<String> list, int index) {
+        int zeros = 0;
+        int ones = 0;
 
-        for (String str : inputArray) {
-            for (int i = 0; i < str.length(); i++) {
-                Integer val = numbers.get(i);
-                if (val != null) {
-                    if (str.charAt(i) == '1') {
-                        numbers.put(i, numbers.get(i) + 1);
-                    }
-                } else {
-                    numbers.put(i, 0);
-                }
+        for (String line : list) {
+            if (line.charAt(index) == '0') {
+                zeros++;
+            }
+            if (line.charAt(index) == '1') {
+                ones++;
             }
         }
-        return numbers;
+
+        if (zeros <= ones) {
+            return '0';
+        } else {
+            return '1';
+        }
     }
 }
