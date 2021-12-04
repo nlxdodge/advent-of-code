@@ -25,4 +25,8 @@ public class AOC {
                 Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
             }
         }
+
+        public static void func() {
+            
+        }
 }
