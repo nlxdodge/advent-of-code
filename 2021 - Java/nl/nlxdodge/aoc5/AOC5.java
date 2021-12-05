@@ -1,6 +1,7 @@
 package nl.nlxdodge.aoc5;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -10,10 +11,11 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC5 {
-    private static final String FILE_PATH = "./nl/nlxdodge/aoc5/input.txt";
-
+    public static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
+    public static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    
     public static void main(String[] args) throws IOException {
-        int size = 999;
+        final int size = 999;
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> list = stream.toList();
 

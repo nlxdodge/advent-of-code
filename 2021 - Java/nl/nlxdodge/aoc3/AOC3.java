@@ -1,6 +1,7 @@
 package nl.nlxdodge.aoc3;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC3 {
-    private static final String FILE_PATH = "./nl/nlxdodge/aoc3/input.txt";
+    public static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
+    public static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
 
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
@@ -35,15 +37,15 @@ public class AOC3 {
 
     public static String reducer(boolean zeroCheck, List<String> input) {
         List<String> newList = new ArrayList<>(input);
-            for (int i = 0; i < input.get(0).length(); i++) {
-                String newBit = significantBits(zeroCheck, newList.size(), parseInputToMap(newList));
-                for (String line : input) {
-                    if (line.charAt(i) != newBit.charAt(i) && newList.size() != 1) {
-                        newList.remove(line);
-                    }
+        for (int i = 0; i < input.get(0).length(); i++) {
+            String newBit = significantBits(zeroCheck, newList.size(), parseInputToMap(newList));
+            for (String line : input) {
+                if (line.charAt(i) != newBit.charAt(i) && newList.size() != 1) {
+                    newList.remove(line);
                 }
             }
-            return newList.get(0);
+        }
+        return newList.get(0);
     }
 
     public static String significantBits(boolean zeroCheck, int inputSize, Map<Integer, Integer> numbers) {
