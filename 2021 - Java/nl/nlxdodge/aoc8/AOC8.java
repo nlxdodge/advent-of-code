@@ -58,23 +58,11 @@ public class AOC8 {
     }
 
     public static Map<Integer, String> decodeDeterminedMappings(List<String> lines) {
+        Map<Integer, Integer> preDefined = new HashMap<>(Map.of(2, 1, 4, 4, 3, 7, 7, 8));
         Map<Integer, String> determiner = new HashMap<>();
         for (String smallChunk : lines) {
-            switch (smallChunk.length()) {
-                case 2:
-                    determiner.put(1, smallChunk);
-                    break;
-                case 4:
-                    determiner.put(4, smallChunk);
-                    break;
-                case 3:
-                    determiner.put(7, smallChunk);
-                    break;
-                case 7:
-                    determiner.put(8, smallChunk);
-                    break;
-                default:
-                    break;
+            if(preDefined.containsKey(smallChunk.length())) {
+                determiner.put(preDefined.get(smallChunk.length()), smallChunk);
             }
         }
         return determiner;
