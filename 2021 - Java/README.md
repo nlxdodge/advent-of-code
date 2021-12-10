@@ -1,21 +1,22 @@
 # Advent of code year 2021
 
-Works with Java 17 or higher.
+## 1 - Today I learned
 
-For example I use:
 ```java
 stream.toList();
 ```
-Which doesn't exist yet in Java 11. If you do however want to run it in Java 11 change the following line of:
 
-```java
-List<String> list = stream.toList();
-```
-To:
+Doesn't exist in Java 11, so to mitigate this I had to use the old way of doing it with a collector.
 
 ```java
 List<String> list = stream.map(String::new).collect(Collectors.toList());
 ```
+
+## 2 - Today I learned
+
+I had an Integer overflow again, and people from the Discords said that other developers mostly used `Long` for that specific purpose in mind. So they never get an Integer overflow. A `Math.multiplyExact` can also be used in a stream to detect if it overflowed.
+
+## Why:
 
 Because I started working this year at Sogeti I wanted to make my java skills better.
 While making a quick java file that could solve the puzzel, I would always refactor some of the code to be better afterwards.
@@ -27,28 +28,28 @@ While also getting all the stars this year and waking up early to try out my ski
 1. ⭐⭐
 1. ⭐⭐
 1. ⭐⭐
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
-1. 
+1. ⭐⭐
+1. ⭐⭐
+1. ⭐⭐
+1. ⭐⭐
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
+1.
