@@ -4,14 +4,14 @@ Because my internship used Ruby and Vue.js as technologies, I learned and used R
 
 1. ⭐⭐
 1. ⭐⭐
+1. 
 1. ⭐⭐
+1. 
+1. 
+1. 
 1. ⭐⭐
-1. ⭐⭐
-1. ⭐⭐
-1. ⭐⭐
-1. ⭐⭐
-1. ⭐⭐
-1. ⭐⭐
+1. 
+1. 
 1.
 1.
 1.
