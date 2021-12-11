@@ -16,7 +16,17 @@ List<String> list = stream.map(String::new).collect(Collectors.toList());
 
 I had an Integer overflow again, and people from the Discords said that other developers mostly used `Long` for that specific purpose in mind. So they never get an Integer overflow. A `Math.multiplyExact` can also be used in a stream to detect if it overflowed.
 
-## Why:
+## 3 - Today I learned
+
+That you could go further than a 2D java array, for example:
+
+```java
+int[][][] threeDimensions = int[][][];
+```
+
+Is valid in java.
+
+## Why
 
 Because I started working this year at Sogeti I wanted to make my java skills better.
 While making a quick java file that could solve the puzzel, I would always refactor some of the code to be better afterwards.
@@ -32,7 +42,7 @@ While also getting all the stars this year and waking up early to try out my ski
 1. ⭐⭐
 1. ⭐⭐
 1. ⭐⭐
-1.
+1. ⭐⭐
 1.
 1.
 1.
