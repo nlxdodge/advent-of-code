@@ -13,11 +13,11 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC10 {
-    public static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    public static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
+    private static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
 
-    public static final List<String> IN = new ArrayList<>(List.of("(", "[", "{", "<"));
-    public static final List<String> OUT = new ArrayList<>(List.of(")", "]", "}", ">"));
+    private static final List<String> IN = new ArrayList<>(List.of("(", "[", "{", "<"));
+    private static final List<String> OUT = new ArrayList<>(List.of(")", "]", "}", ">"));
 
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
@@ -103,6 +103,7 @@ public class AOC10 {
             for (int i = buffer.size() - 1; i >= 0; i--) {
                 String loopChar = buffer.get(i);
                 if (OUT.indexOf(chr) == -1) {
+                    // missing char needed for completing code
                     autoCompleteBuffer.append(OUT.get(IN.indexOf(chr)));
                     buffer.add(OUT.get(IN.indexOf(chr)));
                     break;

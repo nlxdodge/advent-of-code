@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC6 {
-    public static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    public static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
+    private static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
 
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
@@ -29,19 +32,10 @@ public class AOC6 {
     public static Long simulateDays(int days, Map<Integer, Long> school) {
         Map<Integer, Long> newSchool = new HashMap<>();
         for (int day = 1; day < days + 1; day++) {
-            for (Map.Entry<Integer, Long> fish : school.entrySet()) {
+            for (Entry<Integer, Long> fish : school.entrySet()) {
                 int spawn = fish.getKey();
-                if (spawn == 0) {
-                    newSchool.put(8, school.get(0) != null ? school.get(0) : 0);
-                } else {
-                    int newDay = fish.getKey() - 1;
-                    if (school.get(newDay) == null && school.get(spawn) >= 1) {
-                        newSchool.put(newDay, school.get(spawn));
-                    } else {
-                        long oldNumb = school.get(spawn) != null ? school.get(spawn) : 0;
-                        newSchool.put(newDay, oldNumb);
-                    }
-                }
+                newSchool.putAll(handleFish(spawn, school));
+                
             }
             long old0 = school.get(0) != null ? school.get(0) : 0;
             long old7 = school.get(7) != null ? school.get(7) : 0;
@@ -52,6 +46,22 @@ public class AOC6 {
             newSchool.clear();
         }
         return mapSize(school);
+    }
+
+    public static Map<Integer, Long> handleFish(Integer spawn, Map<Integer, Long> school) {
+        Map<Integer, Long> newSchool = new HashMap<>();
+        if (spawn == 0) {
+            newSchool.put(8, school.get(0) != null ? school.get(0) : 0);
+        } else {
+            int newDay = spawn - 1;
+            if (school.get(newDay) == null && school.get(spawn) >= 1) {
+                newSchool.put(newDay, school.get(spawn));
+            } else {
+                long oldNumb = school.get(spawn) != null ? school.get(spawn) : 0;
+                newSchool.put(newDay, oldNumb);
+            }
+        }
+        return newSchool;
     }
 
     public static Map<Integer, Long> initializeMap(List<String> list) {

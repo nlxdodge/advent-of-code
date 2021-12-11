@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC4 {
-    public static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    public static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
-    
+    private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
+    private static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> list = stream.toList();
@@ -30,25 +30,27 @@ public class AOC4 {
             }
 
             List<int[][]> wonBoards = new ArrayList<>();
-            List<Integer> bingoDone = new ArrayList<>();
+            List<Integer> haveBingo = new ArrayList<>();
             for (String hit : bingoTodo) {
-                bingoDone.add(Integer.parseInt(hit));
+                haveBingo.add(Integer.parseInt(hit));
                 for (int[][] board : boards) {
-                    if (checkBoard(bingoDone, board) && !wonBoards.contains(board)) {
+                    if (hasBingo(haveBingo, board) && !wonBoards.contains(board)) {
                         wonBoards.add(board);
-                        if (wonBoards.size() == 1) {
-                            String result1 = "" + sumUnmarked(bingoDone, board) * Integer.parseInt(hit);
-                            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-                        }
-                        if (wonBoards.size() == boards.size()) {
-                            String result2 = "" + sumUnmarked(bingoDone, board) * Integer.parseInt(hit);
-                            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
-                        }
+                        checkResults(boards.size(), board, hit, haveBingo, wonBoards);
                     }
-
                 }
-
             }
+        }
+    }
+
+    public static void checkResults(Integer boardSize, int[][] board, String hit, List<Integer> haveBingo, List<int[][]> wonBoards) {
+        if (wonBoards.size() == 1) {
+            String result1 = "" + sumUnmarked(haveBingo, board) * Integer.parseInt(hit);
+            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
+        }
+        if (wonBoards.size() == boardSize) {
+            String result2 = "" + sumUnmarked(haveBingo, board) * Integer.parseInt(hit);
+            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
         }
     }
 
@@ -76,31 +78,23 @@ public class AOC4 {
         return board;
     }
 
-    public static boolean checkBoard(List<Integer> hits, int[][] board) {
+    public static boolean hasBingo(List<Integer> hits, int[][] board) {
+        boolean hasBingo = false;
         for (int ver = 0; ver < 5; ver++) {
-            int counter = 0;
+            int xC = 0;
+            int yC = 0;
             for (int hor = 0; hor < 5; hor++) {
                 if (hits.contains(board[ver][hor])) {
-                    counter++;
-                    if (counter == 5) {
-                        return true;
-                    }
+                    xC++;
                 }
-
+                if (hits.contains(board[hor][ver])) {
+                    yC++;
+                }
+                if (xC == 5 || yC == 5) {
+                    return true;
+                }
             }
         }
-        for (int hor = 0; hor < 5; hor++) {
-            int counter = 0;
-            for (int ver = 0; ver < 5; ver++) {
-                if (hits.contains(board[ver][hor])) {
-                    counter++;
-                    if (counter == 5) {
-                        return true;
-                    }
-                }
-
-            }
-        }
-        return false;
+        return hasBingo;
     }
 }

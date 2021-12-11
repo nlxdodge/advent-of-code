@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 class AOC1 {
-    public static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    public static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
+    private static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
     public static void main(String[] args) throws IOException {
         List<Depth> filterDepths = new ArrayList<>();
 

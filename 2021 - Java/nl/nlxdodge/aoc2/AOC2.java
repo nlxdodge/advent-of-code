@@ -9,53 +9,29 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 class AOC2 {
-    public static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    public static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
+    private static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
-            int hor = 0;
-            int depth = 0;
-
             List<String> commands = stream.toList();
+            Integer hor = 0;
+            Integer depth = 0;
+            Integer aim = 0;
 
             for (String line : commands) {
                 String comm = line.substring(0, line.length() - 1);
                 Integer val = Integer.parseInt(line.substring(line.length() - 1, line.length()));
-                switch (comm) {
-                    default:
-                    case "forward ":
-                        hor += val;
-                        break;
-                    case "down ":
-                        depth += val;
-                        break;
-                    case "up ":
-                        depth -= val;
-                        break;
+                if (comm.equals("forward ")) {
+                    hor += val;
+                    depth += aim * val;
+                } else if (comm.equals("down ")) {
+                    aim += val;
+                } else if (comm.equals("up ")) {
+                    aim -= val;
                 }
             }
-            int result1 = hor * depth;
-
-            hor = 0;
-            depth = 0;
-            int aim = 0;
-            for (String line : commands) {
-                String comm = line.substring(0, line.length() - 1);
-                Integer val = Integer.parseInt(line.substring(line.length() - 1, line.length()));
-                switch (comm) {
-                    default:
-                    case "forward ":
-                        hor += val;
-                        depth += aim * val;
-                        break;
-                    case "down ":
-                        aim += val;
-                        break;
-                    case "up ":
-                        aim -= val;
-                        break;
-                }
-            }
+            int result1 = hor * aim;
             int result2 = hor * depth;
 
             Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
