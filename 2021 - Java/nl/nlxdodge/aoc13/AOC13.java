@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.OptionalInt;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC13 {
@@ -25,65 +24,58 @@ public class AOC13 {
 
             manual = performFold(folds.get(0), manual);
 
-            Long result1 = countHashes(manual);
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
+            Long result1 = Arrays.stream(manual).flatMap(Arrays::stream).filter(c -> c.equals("#")).count();
+            System.out.println(String.format("Result 1: %s", result1));
 
-            // code for part two
-
-            String result2 = "";
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            manual = initializeManual(cords);
+            for (String fold : folds) {
+                manual = performFold(fold, manual);
+            }
+            print(manual);
         }
     }
 
-    private static Long countHashes(String[][] manual) {
-        return Arrays.stream(manual).flatMap(Arrays::stream).filter(c -> c.equals("#")).count();
+    public static String[][] mirror(Boolean vertical, String[][] left, String[][] right) {
+        for (int y = 0; y < left.length; y++) {
+            for (int x = 0; x < left[0].length; x++) {
+                if (left[y][x].equals("#")) {
+                    if (vertical) {
+                        int newVar = right.length - 1 - y;
+                        right[newVar][x] = left[y][x];
+                    } else {
+                        int newVar = right[0].length - 1 - x;
+                        right[y][newVar] = left[y][x];
+                    }
+                }
+            }
+        }
+        return right;
     }
 
     private static String[][] performFold(String fold, String[][] manual) {
-        Integer startLine = Integer.parseInt(fold.split("=")[1]);
-        createLine(manual, startLine, fold.contains("x"));
+        Integer foldLine = Integer.parseInt(fold.split("=")[1]);
+        createLine(manual, foldLine, fold.contains("x"));
         if (fold.contains("y")) {
-            // horizontal
-            String[][] copy = Arrays.copyOfRange(manual, startLine + 1, manual.length);
-            String[][] newManual = Arrays.copyOfRange(manual, 0, startLine);
-            for (int y = 0; y < newManual.length; y++) {
-                for (int x = 0; x < newManual[0].length; x++) {
-                    if (copy[y][x].equals("#")) {
-                        int newY = newManual.length - 1 - y;
-                        newManual[newY][x] = copy[y][x];
-                    }
-                }
-            }
-            return newManual;
-        } else if (fold.contains("x")) {
-            // vertical
-            String[][] copy = new String[manual.length][startLine];
-            String[][] newManual = new String[manual.length][startLine];
-            setAllTo(copy, ".");
-            setAllTo(newManual, ".");
+            String[][] right = Arrays.copyOfRange(manual, 0, foldLine);
+            String[][] left = Arrays.copyOfRange(manual, foldLine + 1, manual.length);
 
-            // transform to only half the array size
-            for (int y = 0; y < manual.length - 1; y++) {
-                for (int x = 0; x < manual[0].length - 1; x++) {
-                    if (x < startLine) {
-                        copy[y][x] = manual[y][x];
-                    } else {
-                        newManual[y][x - startLine] = manual[y][x + 1];
+            return mirror(true, left, right);
+        } else {
+            String[][] right = setAllTo(new String[manual.length][foldLine], ".");
+            String[][] left = setAllTo(new String[manual.length][foldLine], ".");
+
+            // map to smaller array sizes
+            for (int y = 0; y < manual.length; y++) {
+                for (int x = 0; x < manual[0].length; x++) {
+                    if (x < foldLine) {
+                        right[y][x] = manual[y][x];
+                    } else if (x > foldLine) {
+                        left[y][x - foldLine - 1] = manual[y][x];
                     }
                 }
             }
-            // do normal mapping to other side
-            for (int y = 0; y < newManual.length; y++) {
-                for (int x = 0; x < newManual[0].length; x++) {
-                    if (copy[y][x].equals("#")) {
-                        int newX = newManual[0].length - 1 - x;
-                        newManual[y][newX] = copy[y][x];
-                    }
-                }
-            }
-            return newManual;
+            return mirror(false, left, right);
         }
-        return new String[1][1];
     }
 
     private static void print(String[][] manual) {
@@ -96,9 +88,8 @@ public class AOC13 {
                 }
                 System.out.print(str);
             }
-            System.out.println("");
+            System.out.print("\n");
         }
-        System.out.println("\n");
     }
 
     private static void createLine(String[][] manual, Integer startLine, boolean vertical) {
@@ -126,8 +117,7 @@ public class AOC13 {
         OptionalInt y = list.stream().mapToInt(s -> Integer.parseInt(s.split(",")[0])).max();
         OptionalInt x = list.stream().mapToInt(s -> Integer.parseInt(s.split(",")[1])).max();
 
-        String[][] manual = new String[x.getAsInt() + 1][y.getAsInt() + 1];
-        setAllTo(manual, ".");
+        String[][] manual = setAllTo(new String[x.getAsInt() + 1][y.getAsInt() + 1], ".");
         for (String line : list) {
             String[] cords = line.split(",");
             manual[Integer.parseInt(cords[1])][Integer.parseInt(cords[0])] = "#";
