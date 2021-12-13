@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC11 {
@@ -15,30 +14,25 @@ public class AOC11 {
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> list = stream.toList();
-
             int[][][] map = initializeDataset(list);
 
-            int steps = 100;
-            Long totalFlashes = 0L;
-            for (int step = 1; step <= steps; step++) {
-                totalFlashes += itterateOctopusses(map);
-            }
-            Long result1 = totalFlashes;
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-
-            map = initializeDataset(list);
             int step = 0;
+            Long totalFlashes = 0L;
             Long flashAllStep = 0L;
             while (flashAllStep == 0) {
                 step++;
-                itterateOctopusses(map);
+                Long flashes = itterateOctopusses(map);
+                totalFlashes += step <= 100 ? flashes : 0;
+
                 if (flashAllAtSametime(map)) {
                     flashAllStep = (long) step;
                 }
             }
 
+            Long result1 = totalFlashes;
             Long result2 = flashAllStep;
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

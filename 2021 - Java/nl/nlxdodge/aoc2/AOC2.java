@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 class AOC2 {
@@ -34,8 +33,8 @@ class AOC2 {
             int result1 = hor * aim;
             int result2 = hor * depth;
 
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 }

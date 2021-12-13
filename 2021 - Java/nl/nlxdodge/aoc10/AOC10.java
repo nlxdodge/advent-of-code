@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC10 {
@@ -36,7 +35,7 @@ public class AOC10 {
             }
 
             Integer result1 = calScore(corruptLines);
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 1: %s", result1));
 
             List<String> missingChars = new ArrayList<>();
             for (String line : incompleteLines) {
@@ -44,7 +43,7 @@ public class AOC10 {
             }
 
             Long result2 = calcScoreMissing(missingChars);
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC {
@@ -18,17 +17,13 @@ public class AOC {
 
             // code for part one
 
-            String result1 = "";
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
+            Long result1 = (long) list.size();
+            System.out.println(String.format("Result 1: %s", result1));
 
             // code for part two
 
             String result2 = "";
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 2: %s", result2));
         }
-    }
-
-    public static void func() {
-
     }
 }

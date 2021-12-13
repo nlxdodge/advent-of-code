@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC9 {
@@ -18,17 +17,16 @@ public class AOC9 {
             List<String> list = stream.toList();
             int[][] map = initializeMap(list);
 
-            List<Integer> lowest = markLowerPoint(map);
-
-            int result1 = lowest.stream().map(l -> l + 1).mapToInt(Integer::intValue).sum();
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-
+            List<Integer> lowest = markLowerPoint(map); 
             List<Integer> basins = calculateBasins(map).stream().sorted().toList();
+            
+            int result1 = lowest.stream().map(l -> l + 1).mapToInt(Integer::intValue).sum();
+            int result2 = basins.subList(basins.size() - 2, basins.size())
+            .stream()
+            .reduce(basins.get(basins.size() - 3), (a, b) -> a * b);
 
-            Integer result2 = basins.subList(basins.size() - 2, basins.size())
-                    .stream()
-                    .reduce(basins.get(basins.size() - 3), (a, b) -> a * b);
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

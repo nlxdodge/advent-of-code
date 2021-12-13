@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC12 {
@@ -21,12 +20,12 @@ public class AOC12 {
             List<Cave> caves = setCavePaths(list);
 
             Integer result1 = findAllPaths(caves).size();
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 1: %s", result1));
 
             // code for part two
 
             String result2 = "";
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

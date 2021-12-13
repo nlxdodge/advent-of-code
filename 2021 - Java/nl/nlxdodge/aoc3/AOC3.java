@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC3 {
@@ -21,17 +20,14 @@ public class AOC3 {
 
             String mostSignificant = significantBits(false, l.size(), parseInputToMap(l));
             String leastSignificant = significantBits(true, l.size(), parseInputToMap(l));
-
-            int result1 = Integer.parseInt(mostSignificant, 2) * Integer.parseInt(leastSignificant, 2);
-
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-
             String oxygen = reducer(true, l);
             String co2Scrubber = reducer(false, l);
-
+            
+            int result1 = Integer.parseInt(mostSignificant, 2) * Integer.parseInt(leastSignificant, 2);
             int result2 = Integer.parseInt(oxygen, 2) * Integer.parseInt(co2Scrubber, 2);
 
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

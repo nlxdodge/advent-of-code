@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC6 {
@@ -20,12 +19,12 @@ public class AOC6 {
             List<String> list = stream.toList();
 
             Map<Integer, Long> school = initializeMap(list);
-            Long result1 = simulateDays(80, school);
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
 
-            Map<Integer, Long> school2 = initializeMap(list);
-            Long result2 = simulateDays(256, school2);
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            Long result1 = simulateDays(80, new HashMap<>(school));
+            Long result2 = simulateDays(256, new HashMap<>(school));
+
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 
@@ -35,7 +34,7 @@ public class AOC6 {
             for (Entry<Integer, Long> fish : school.entrySet()) {
                 int spawn = fish.getKey();
                 newSchool.putAll(handleFish(spawn, school));
-                
+
             }
             long old0 = school.get(0) != null ? school.get(0) : 0;
             long old7 = school.get(7) != null ? school.get(7) : 0;

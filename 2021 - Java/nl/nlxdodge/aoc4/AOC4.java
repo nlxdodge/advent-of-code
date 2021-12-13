@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC4 {
@@ -46,11 +45,11 @@ public class AOC4 {
     public static void checkResults(Integer boardSize, int[][] board, String hit, List<Integer> haveBingo, List<int[][]> wonBoards) {
         if (wonBoards.size() == 1) {
             String result1 = "" + sumUnmarked(haveBingo, board) * Integer.parseInt(hit);
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 1: %s", result1));
         }
         if (wonBoards.size() == boardSize) {
             String result2 = "" + sumUnmarked(haveBingo, board) * Integer.parseInt(hit);
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

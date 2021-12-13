@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 class AOC1 {
@@ -39,8 +38,8 @@ class AOC1 {
             long result1 = filterDepths.stream().filter(d -> d.up).count();
             long result2 = sumDepths.stream().filter(d -> d.up).count();
 
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 }

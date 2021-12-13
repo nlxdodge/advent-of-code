@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC5 {
@@ -23,15 +22,15 @@ public class AOC5 {
             for (String line : list) {
                 setGridLine(grid, createPositionList(line), false);
             }
-            Long result1 = higherAsTwo(grid);
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
-
             int[][] gridVertical = new int[size][size];
             for (String line : list) {
                 setGridLine(gridVertical, createPositionList(line), true);
             }
+
+            Long result1 = higherAsTwo(grid);
             Long result2 = higherAsTwo(gridVertical);
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

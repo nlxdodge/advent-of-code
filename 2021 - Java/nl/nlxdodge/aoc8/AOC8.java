@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,10 +37,10 @@ public class AOC8 {
             }
 
             Integer result1 = counter1;
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 1: %s", result1));
 
             Integer result2 = counter2;
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", result2));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 

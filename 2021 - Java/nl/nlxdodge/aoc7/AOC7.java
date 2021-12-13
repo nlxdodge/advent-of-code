@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class AOC7 {
@@ -21,16 +20,15 @@ public class AOC7 {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> list = stream.toList();
             List<Integer> crabSpawn = initializeCrabs(list.get(0));
-
             int highest = getHighestValue(crabSpawn);
 
             Map<Integer, Integer> fuelMap1 = calculateFuelMap(highest, crabSpawn, false);
-            int lowestFuelConsumption1 = getLowestValue(fuelMap1.values());
-            Logger.getGlobal().info(() -> String.format("Result 1: %s", lowestFuelConsumption1));
-
             Map<Integer, Integer> fuelMap2 = calculateFuelMap(highest, crabSpawn, true);
-            int lowestFuelConsumption2 = getLowestValue(fuelMap2.values());
-            Logger.getGlobal().info(() -> String.format("Result 2: %s", lowestFuelConsumption2));
+            
+            int result1 = getLowestValue(fuelMap1.values());
+            int result2 = getLowestValue(fuelMap2.values());
+            System.out.println(String.format("Result 1: %s", result1));
+            System.out.println(String.format("Result 2: %s", result2));
         }
     }
 
