@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,17 +18,17 @@ public class AOC14 {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> list = stream.toList();
 
-            List<Polymer> polymer = initalizePolymer(list.get(0));
+            Map<String, Long> polymer = initalizePolymer(list.get(0));
             Map<String, String> rules = initalizeRules(list.subList(2, list.size()));
 
             Long tenStepResult = 0L;
             int maxSteps = 40;
             for (int step = 1; step <= maxSteps; step++) {
+                System.out.println("Step: " + step);
                 polymer = parseStep(polymer, rules);
-                polymer.stream().forEach(p -> p.newChar = false);
-                System.out.println(String.format("Step: %s Polymer size: %s", step, polymer.size()));
-                if (step == 100) {
-                    tenStepResult = subTractHighestLowest(polymer);
+                if (step == 10) {
+                    Map<String, Long> countMap = mapToSingleChar(polymer);
+                    tenStepResult = subTractHighestLowest(countMap);
                 }
             }
 
@@ -43,26 +42,42 @@ public class AOC14 {
         }
     }
 
-    private static Long subTractHighestLowest(List<Polymer> polymer) {
+    private static Map<String, Long> mapToSingleChar(Map<String, Long> polymer) {
+        Map<String, Long> countMap = new HashMap<>();
+        for (Entry<String, Long> entry : polymer.entrySet()) {
+            String[] chars = entry.getKey().split("");
+            for (String chr : chars) {
+                if (!countMap.containsKey(chr)) {
+                    countMap.put(chr, 0L);
+                }
+            }
+        }
+        for (Entry<String, Long> entry : polymer.entrySet()) {
+            String[] keys = entry.getKey().split("");
+            countMap.put(keys[1], countMap.get(keys[1]) + entry.getValue());
+        }
+        return countMap;
+    }
+
+    private static Long subTractHighestLowest(Map<String, Long> countMap) {
         Long lowest = Long.MAX_VALUE;
         Long highest = 0L;
-
-        for (Polymer poly : polymer) {
-            Long count = polymer.stream().filter(p -> p.chr.equals(poly.chr)).count();
-            if (count > highest) {
-                highest = count;
+        for (Entry<String, Long> entry : countMap.entrySet()) {
+            if (entry.getValue() > highest) {
+                highest = entry.getValue();
             }
-            if (count < lowest) {
-                lowest = count;
+            if (entry.getValue() < lowest) {
+                lowest = entry.getValue();
             }
         }
         return highest - lowest;
     }
 
-    private static List<Polymer> initalizePolymer(String string) {
-        List<Polymer> polymer = new ArrayList<>();
-        for (char chr : string.toCharArray()) {
-            polymer.add(new Polymer(Character.toString(chr)));
+    private static Map<String, Long> initalizePolymer(String input) {
+        Map<String, Long> polymer = new HashMap<>();
+        for (int i = 0; i < input.length() - 1; i++) {
+            String pair = input.charAt(i) + "" + input.charAt(i + 1);
+            polymer.put(pair, polymer.containsKey(pair) ? polymer.get(pair) : 1);
         }
         return polymer;
     }
@@ -76,38 +91,19 @@ public class AOC14 {
         return rules;
     }
 
-    private static List<Polymer> parseStep(List<Polymer> polymer, Map<String, String> rules) {
-        for (Entry<String, String> rule : rules.entrySet()) {
-            for (int walk = 0; walk < polymer.size() - 1; walk++) {
-                if (polymer.get(walk).newChar || polymer.get(walk + 1).newChar) {
-                    continue;
-                }
-                String searchFor = polymer.get(walk).chr + "" + polymer.get(walk + 1).chr;
-                if (searchFor.equals(rule.getKey())) {
-                    Polymer newPolymer = new Polymer(rule.getValue(), true);
-                    polymer.add(walk + 1, newPolymer);
-                    // System.out.println(String.format("%s -> %s", polymer, newPolymer));
-                }
-            }
+    private static Map<String, Long> parseStep(Map<String, Long> pairs, Map<String, String> rules) {
+        var newPairs = new HashMap<>(pairs);
+        for (Entry<String, Long> pair : pairs.entrySet()) {
+
+            newPairs.put(pair.getKey(), newPairs.get(pair.getKey()) - pair.getValue());
+            var chars = pair.getKey().split("");
+
+            var key1 = chars[0] + rules.get(pair.getKey());
+            var key2 = rules.get(pair.getKey()) + chars[1];
+            newPairs.put(key1, newPairs.containsKey(key1) ? newPairs.get(key1) + pair.getValue() : 1L);
+            newPairs.put(key2, newPairs.containsKey(key2) ? newPairs.get(key2) + pair.getValue() : 1L);
+
         }
-        return polymer;
-    }
-}
-
-class Polymer {
-    String chr;
-    Boolean newChar = false;
-
-    public Polymer(String chr) {
-        this.chr = chr;
-    }
-
-    public Polymer(String chr, Boolean newChar) {
-        this(chr);
-        this.newChar = newChar;
-    }
-
-    public String toString() {
-        return String.format("%s = %s", chr, newChar);
+        return newPairs;
     }
 }
