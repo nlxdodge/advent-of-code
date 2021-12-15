@@ -25,8 +25,10 @@ public class AOC14 {
             int maxSteps = 40;
             for (int step = 1; step <= maxSteps; step++) {
                 System.out.println("Step: " + step);
-                polymer = parseStep(polymer, rules);
-                if (step == 10) {
+                for(Entry<String, Long> entry : parseStep(polymer, rules).entrySet()) {
+                    polymer.merge(entry.getKey(), entry.getValue(), Long::sum);
+                }
+                if (step == 5) {
                     Map<String, Long> countMap = mapToSingleChar(polymer);
                     tenStepResult = subTractHighestLowest(countMap);
                 }
@@ -44,18 +46,17 @@ public class AOC14 {
 
     private static Map<String, Long> mapToSingleChar(Map<String, Long> polymer) {
         Map<String, Long> countMap = new HashMap<>();
+        // countMap.put("B", 1L);
         for (Entry<String, Long> entry : polymer.entrySet()) {
-            String[] chars = entry.getKey().split("");
-            for (String chr : chars) {
-                if (!countMap.containsKey(chr)) {
-                    countMap.put(chr, 0L);
-                }
-            }
+            String key = "" + entry.getKey().charAt(0);
+            countMap.putIfAbsent(key, 0L);
+            countMap.put(key, (countMap.get(key) + polymer.get(entry.getKey())));
+
         }
-        for (Entry<String, Long> entry : polymer.entrySet()) {
-            String[] keys = entry.getKey().split("");
-            countMap.put(keys[1], countMap.get(keys[1]) + entry.getValue());
-        }
+        System.out
+                .println(String.format("Polymer Size: %s", polymer.values().stream().mapToLong(Long::longValue).sum()));
+        System.out.println(
+                String.format("CountMap Size: %s", countMap.values().stream().mapToLong(Long::longValue).sum()));
         return countMap;
     }
 
@@ -92,17 +93,15 @@ public class AOC14 {
     }
 
     private static Map<String, Long> parseStep(Map<String, Long> pairs, Map<String, String> rules) {
-        var newPairs = new HashMap<>(pairs);
-        for (Entry<String, Long> pair : pairs.entrySet()) {
+        HashMap<String, Long> newPairs = new HashMap<>();
+        for (String pair : pairs.keySet()) {
+            String key1 = pair.charAt(0) + rules.get(pair);
+            String key2 = rules.get(pair) + pair.charAt(1);
 
-            newPairs.put(pair.getKey(), newPairs.get(pair.getKey()) - pair.getValue());
-            var chars = pair.getKey().split("");
-
-            var key1 = chars[0] + rules.get(pair.getKey());
-            var key2 = rules.get(pair.getKey()) + chars[1];
-            newPairs.put(key1, newPairs.containsKey(key1) ? newPairs.get(key1) + pair.getValue() : 1L);
-            newPairs.put(key2, newPairs.containsKey(key2) ? newPairs.get(key2) + pair.getValue() : 1L);
-
+            if (pairs.get(pair) > 0) {
+                newPairs.put(key1, newPairs.containsKey(key1) ? newPairs.get(key1) + pairs.get(pair) : 1L);
+                newPairs.put(key2, newPairs.containsKey(key2) ? newPairs.get(key2) + pairs.get(pair) : 1L);
+            }
         }
         return newPairs;
     }

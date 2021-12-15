@@ -17,7 +17,9 @@ public class AOC12 {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
             List<String> list = stream.toList();
 
-            List<Cave> caves = setCavePaths(list);
+            List<Cave> caves = setListOfCaves(list);
+
+            System.out.println(findAllPaths(caves));
 
             Integer result1 = findAllPaths(caves).size();
             System.out.println(String.format("Result 1: %s", result1));
@@ -43,15 +45,12 @@ public class AOC12 {
     public static List<Cave> traverse(List<List<Cave>> allRoutes, Cave cave, List<Cave> route) {
         for (Cave subCave : cave.getSubCaves()) {
             if (subCave.canVisit(1)) {
+                System.out.println(String.format("%s -> %s", cave.getName(), subCave.getName()));
                 route.add(subCave);
                 subCave.setVisited();
-                if (subCave.getName().equals("end")) {
-                    System.out.println(route);
+                if (!allRoutes.contains(route) && subCave.getName().equals("end")) {
+                    System.out.println("New route found: " + route);
                     allRoutes.add(new ArrayList<>(route));
-                    route = new ArrayList<>();
-
-                    
-
                 } else {
                     traverse(allRoutes, subCave, new ArrayList<>(route));
                 }
@@ -60,7 +59,7 @@ public class AOC12 {
         return route;
     }
 
-    public static List<Cave> setCavePaths(List<String> input) {
+    public static List<Cave> setListOfCaves(List<String> input) {
         List<Cave> caves = new ArrayList<>();
         for (String line : input) {
             String[] nodesText = line.split("-");
@@ -114,7 +113,7 @@ class Cave {
         if (name.equals("start")) {
             return false;
         }
-        return visitedTimes < times || Character.isUpperCase(name.charAt(0));
+        return visitedTimes < times || Character.isUpperCase(name.charAt(0)) || name.equals("end");
     }
 
     public void setVisited() {
