@@ -26,6 +26,13 @@ int[][][] threeDimensions = int[][][];
 
 Is valid in java.
 
+## 4 - Today I learned
+
+When trying to get the smallest or highest number from an Array of objects the easiest thing to do is:
+```java
+int smallest = array.stream().mapToInt(o -> o.number).min().getAsInt();
+```
+
 ## Why
 
 Because I started working this year at Sogeti I wanted to make my java skills better.
@@ -44,11 +51,11 @@ While also getting all the stars this year and waking up early to try out my ski
 1. ⭐⭐
 1. ⭐⭐
 1.
+1. ⭐⭐
+1. ⭐
+1. ⭐⭐
 1.
-1.
-1.
-1.
-1.
+1. ⭐⭐
 1.
 1.
 1.
