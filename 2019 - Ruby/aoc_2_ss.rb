@@ -180,7 +180,7 @@ def check_instruction_set
       do_calculation(index, true)
     when 99
       return @op_codes[0]
-    default
+    else
       puts 'Command not found'
     end
   end
