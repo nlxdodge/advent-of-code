@@ -44,6 +44,8 @@ def run_wire(command, index)
     run_direction(1, 1, command, index)
   when 'D'
     run_direction(1, -1, command, index)
+  default
+    puts 'Command not found'
   end
 end
 

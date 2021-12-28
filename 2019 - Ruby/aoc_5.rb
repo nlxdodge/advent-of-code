@@ -40,6 +40,8 @@ def check_instruction_set(op_codes)
       do_calculation(op_codes, index, true)
     when 99
       return op_codes[0]
+    default
+      puts 'Command not found'
     end
   end
 end
