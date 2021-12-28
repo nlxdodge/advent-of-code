@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class AOC10 {
     private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    private static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt", FOLDER_NAME);
 
     private static final List<String> IN = new ArrayList<>(List.of("(", "[", "{", "<"));
     private static final List<String> OUT = new ArrayList<>(List.of(")", "]", "}", ">"));

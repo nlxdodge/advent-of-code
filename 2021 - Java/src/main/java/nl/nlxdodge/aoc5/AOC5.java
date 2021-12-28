@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class AOC5 {
     private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    private static final String FILE_PATH = String.format("./nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt", FOLDER_NAME);
     
     public static void main(String[] args) throws IOException {
         final int size = 999;
