@@ -3,12 +3,12 @@ package nl.nlxdodge.aoc2;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AOC2 {
@@ -18,7 +18,7 @@ public class AOC2 {
         long doubles = 0L;
         long triples = 0L;
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
-            List<CheckSum> checkSums = stream.map(CheckSum::new).collect(Collectors.toList());
+            List<CheckSum> checkSums = stream.map(CheckSum::new).toList();
 
             doubles = checkSums.stream().filter(checksum -> checksum.hasAtLeastOneOfCount(2)).count();
             triples = checkSums.stream().filter(checksum -> checksum.hasAtLeastOneOfCount(3)).count();
@@ -79,7 +79,7 @@ class CheckSum {
 
     private void generateCheckSum() {
         checkMap.clear();
-        line.chars().mapToObj(c -> (char) c).forEach(character -> {
+        Arrays.stream(line.toCharArray()).forEach(character -> {
             if (!checkMap.containsKey(character)) {
                 checkMap.put(character, 1);
             } else {

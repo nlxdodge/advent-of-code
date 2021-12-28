@@ -30,12 +30,12 @@ class AOC1 {
 }
 
 class Frequency {
-    private int frequency = 0;
+    private int totalFrequency = 0;
     private List<Integer> frequenciesHitList = new ArrayList<>();
     private boolean foundDuplicate = false;
 
     public int getFrequency() {
-        return frequency;
+        return totalFrequency;
     }
 
     public boolean hasDuplicate() {
@@ -48,10 +48,10 @@ class Frequency {
         switch (operator) {
         default:
         case "+":
-            frequency += amount;
+            totalFrequency += amount;
             break;
         case "-":
-            frequency -= amount;
+            totalFrequency -= amount;
             break;
         }
 
@@ -60,10 +60,10 @@ class Frequency {
             foundDuplicate = true;
         }
 
-        frequenciesHitList.add(frequency);
+        frequenciesHitList.add(totalFrequency);
     }
 
     public boolean doesOverlap() {
-        return frequenciesHitList.contains(frequency);
+        return frequenciesHitList.contains(totalFrequency);
     }
 }
