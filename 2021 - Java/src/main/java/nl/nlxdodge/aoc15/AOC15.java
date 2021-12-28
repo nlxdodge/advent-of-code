@@ -25,7 +25,7 @@ public class AOC15 {
 
             List<Node> smallestPath = aStar(map);
 
-            Long result1 = (long) smallestPath
+            Long result1 = smallestPath
                     .subList(0, smallestPath.size() - 1)
                     .stream()
                     .mapToLong(n -> n.value)
@@ -35,7 +35,7 @@ public class AOC15 {
             Node[][] biggerMap = resizeMap(map, 5);
             List<Node> smallestPathBiggerMap = aStar(biggerMap);
 
-            Long result2 = (long) smallestPathBiggerMap
+            Long result2 = smallestPathBiggerMap
                     .subList(0, smallestPathBiggerMap.size() - 1)
                     .stream()
                     .mapToLong(n -> n.value)
