@@ -1,9 +1,6 @@
 package src.main.java.nl.nlxdodge.aoc15;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,12 +8,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.stream.Stream;
 
 public class AOC15 {
     private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt",
+            FOLDER_NAME);
 
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
@@ -53,25 +52,28 @@ public class AOC15 {
         PriorityQueue<Node> openSet = new PriorityQueue<>(List.of(start));
 
         while (!openSet.isEmpty()) {
-            Node current = openSet.stream().min(Node::compareTo).get();
-            if (current == target) {
-                return reConstructPath(cameFrom, current);
-            }
-            openSet.remove(current);
-            List<Node> neighbours = getNeighbours(map, current);
-            for (Node m : neighbours) {
-                Long gScore = current.g + m.value;
-                if (gScore < m.g) {
-                    cameFrom.put(m, current);
-                    m.g = gScore;
-                    m.f = gScore + m.value;
-                    if (!openSet.contains(m)) {
-                        openSet.add(m);
+            Optional<Node> current = openSet.stream().min(Node::compareTo);
+            if (current.isPresent()) {
+                Node currentNode = current.get();
+                if (currentNode == target) {
+                    return reConstructPath(cameFrom, currentNode);
+                }
+                openSet.remove(currentNode);
+                List<Node> neighbours = getNeighbours(map, currentNode);
+                for (Node m : neighbours) {
+                    Long gScore = currentNode.g + m.value;
+                    if (gScore < m.g) {
+                        cameFrom.put(m, currentNode);
+                        m.g = gScore;
+                        m.f = gScore + m.value;
+                        if (!openSet.contains(m)) {
+                            openSet.add(m);
+                        }
                     }
                 }
             }
         }
-        throw new RuntimeException("Couldn't find target in A-star algorithm");
+        return new ArrayList<>();
     }
 
     private static List<Node> reConstructPath(Map<Node, Node> cameFrom, Node current) {
@@ -89,20 +91,6 @@ public class AOC15 {
                 System.out.print(path.contains(map[y][x]) ? "█" : map[y][x].value);
             }
             System.out.println("");
-        }
-    }
-
-    private static void save(List<Node> path, Node[][] map) {
-        try (PrintStream output = new PrintStream(new File("./nl/nlxdodge/aoc15/output.txt"))) {
-            for (int y = 0; y < map.length; y++) {
-                StringBuilder line = new StringBuilder();
-                for (int x = 0; x < map.length; x++) {
-                    line.append(path.contains(map[y][x]) ? "█" : map[y][x].value);
-                }
-                output.println(line.toString());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
