@@ -1,4 +1,4 @@
-package src.main.java.nl.nlxdodge.aoc16;
+package nl.nlxdodge.aoc16;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -115,22 +115,22 @@ public class AOC16 {
     }
 
     public static String hexToBin(String hex) {
-        hex = hex.replaceAll("0", "0000");
-        hex = hex.replaceAll("1", "0001");
-        hex = hex.replaceAll("2", "0010");
-        hex = hex.replaceAll("3", "0011");
-        hex = hex.replaceAll("4", "0100");
-        hex = hex.replaceAll("5", "0101");
-        hex = hex.replaceAll("6", "0110");
-        hex = hex.replaceAll("7", "0111");
-        hex = hex.replaceAll("8", "1000");
-        hex = hex.replaceAll("9", "1001");
-        hex = hex.replaceAll("A", "1010");
-        hex = hex.replaceAll("B", "1011");
-        hex = hex.replaceAll("C", "1100");
-        hex = hex.replaceAll("D", "1101");
-        hex = hex.replaceAll("E", "1110");
-        hex = hex.replaceAll("F", "1111");
+        hex = hex.replace("0", "0000");
+        hex = hex.replace("1", "0001");
+        hex = hex.replace("2", "0010");
+        hex = hex.replace("3", "0011");
+        hex = hex.replace("4", "0100");
+        hex = hex.replace("5", "0101");
+        hex = hex.replace("6", "0110");
+        hex = hex.replace("7", "0111");
+        hex = hex.replace("8", "1000");
+        hex = hex.replace("9", "1001");
+        hex = hex.replace("A", "1010");
+        hex = hex.replace("B", "1011");
+        hex = hex.replace("C", "1100");
+        hex = hex.replace("D", "1101");
+        hex = hex.replace("E", "1110");
+        hex = hex.replace("F", "1111");
         return hex;
     }
 }

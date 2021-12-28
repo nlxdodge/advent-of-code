@@ -1,4 +1,4 @@
-package src.main.java.nl.nlxdodge.aoc19;
+package nl.nlxdodge.aoc19;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;

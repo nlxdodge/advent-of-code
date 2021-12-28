@@ -1,4 +1,4 @@
-package src.main.java.nl.nlxdodge.aoc20;
+package nl.nlxdodge.aoc20;
 
 import java.io.FileWriter;
 import java.io.IOException;

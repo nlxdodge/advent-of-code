@@ -1,4 +1,4 @@
-package src.main.java.nl.nlxdodge.aoc8;
+package nl.nlxdodge.aoc8;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -14,7 +14,8 @@ import java.util.stream.Stream;
 
 public class AOC8 {
     private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt",
+            FOLDER_NAME);
 
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
@@ -60,7 +61,7 @@ public class AOC8 {
         Map<Integer, Integer> preDefined = new HashMap<>(Map.of(2, 1, 4, 4, 3, 7, 7, 8));
         Map<Integer, String> determiner = new HashMap<>();
         for (String smallChunk : lines) {
-            if(preDefined.containsKey(smallChunk.length())) {
+            if (preDefined.containsKey(smallChunk.length())) {
                 determiner.put(preDefined.get(smallChunk.length()), smallChunk);
             }
         }
@@ -69,39 +70,51 @@ public class AOC8 {
 
     public static Map<Integer, String> decodeUnditerminedMappings(Map<Integer, String> determiner, List<String> lines) {
         for (String smallChunk : lines) {
-            Long fourCount = countCharsInString(smallChunk, determiner.get(4));
-            Long sevenCount = countCharsInString(smallChunk, determiner.get(7));
             if (smallChunk.length() == 5) {
-                if (sevenCount == 2 && fourCount == 2) {
-                    determiner.put(2, smallChunk);
-                }
-                if (sevenCount == 3 && fourCount == 3) {
-                    determiner.put(3, smallChunk);
-                }
-                if (sevenCount == 2 && fourCount == 3) {
-                    determiner.put(5, smallChunk);
-                }
+                determiner.putAll(determineFiveLength(determiner, smallChunk));
             }
             if (smallChunk.length() == 6) {
-                if (fourCount == 4) {
-                    determiner.put(9, smallChunk);
-                }
-                if (sevenCount == 3 && fourCount == 3) {
-                    determiner.put(0, smallChunk);
-                }
-                if (sevenCount == 2 && fourCount == 3) {
-                    determiner.put(6, smallChunk);
-                }
+                determiner.putAll(determineSixLength(determiner, smallChunk));
             }
         }
         return determiner;
     }
 
-    public static Long countCharsInString(String find, String inString) {
+    private static Map<Integer, String> determineFiveLength(Map<Integer, String> determiner, String smallChunk) {
+        Long fourCount = countCharsInString(smallChunk, determiner.get(4));
+        Long sevenCount = countCharsInString(smallChunk, determiner.get(7));
+        if (sevenCount == 2 && fourCount == 2) {
+            determiner.put(2, smallChunk);
+        }
+        if (sevenCount == 3 && fourCount == 3) {
+            determiner.put(3, smallChunk);
+        }
+        if (sevenCount == 2 && fourCount == 3) {
+            determiner.put(5, smallChunk);
+        }
+        return determiner;
+    }
+
+    private static Map<Integer, String> determineSixLength(Map<Integer, String> determiner, String smallChunk) {
+        Long fourCount = countCharsInString(smallChunk, determiner.get(4));
+        Long sevenCount = countCharsInString(smallChunk, determiner.get(7));
+        if (fourCount == 4) {
+            determiner.put(9, smallChunk);
+        }
+        if (sevenCount == 3 && fourCount == 3) {
+            determiner.put(0, smallChunk);
+        }
+        if (sevenCount == 2 && fourCount == 3) {
+            determiner.put(6, smallChunk);
+        }
+        return determiner;
+    }
+
+    private static Long countCharsInString(String find, String inString) {
         return Arrays.stream(inString.split("")).filter(find::contains).collect(Collectors.counting());
     }
 
-    public static Integer decodeCombinedOutput(Map<Integer, String> mapping, List<String> list) {
+    private static Integer decodeCombinedOutput(Map<Integer, String> mapping, List<String> list) {
         StringBuilder stringBuilder = new StringBuilder();
         for (String line : list) {
             for (Entry<Integer, String> entry : mapping.entrySet()) {
