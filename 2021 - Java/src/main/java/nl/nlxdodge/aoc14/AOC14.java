@@ -24,22 +24,19 @@ public class AOC14 {
             Long tenStepResult = 0L;
             int maxSteps = 40;
             for (int step = 1; step <= maxSteps; step++) {
-                System.out.println("Step: " + step);
                 for(Entry<String, Long> entry : parseStep(polymer, rules).entrySet()) {
                     polymer.merge(entry.getKey(), entry.getValue(), Long::sum);
                 }
                 if (step == 5) {
+                    System.out.println("Step 5:");
                     Map<String, Long> countMap = mapToSingleChar(polymer);
                     tenStepResult = subTractHighestLowest(countMap);
                 }
             }
 
             Long result1 = tenStepResult;
-            System.out.println(String.format("Result 1: %s", result1));
-
-            // code for part two
-
             Long result2 = subTractHighestLowest(polymer);
+            System.out.println(String.format("Result 1: %s", result1));
             System.out.println(String.format("Result 2: %s", result2));
         }
     }
@@ -94,13 +91,13 @@ public class AOC14 {
 
     private static Map<String, Long> parseStep(Map<String, Long> pairs, Map<String, String> rules) {
         HashMap<String, Long> newPairs = new HashMap<>();
-        for (String pair : pairs.keySet()) {
-            String key1 = pair.charAt(0) + rules.get(pair);
-            String key2 = rules.get(pair) + pair.charAt(1);
+        for (Entry<String, Long> entry : pairs.entrySet()) {
+            String key1 = entry.getKey().charAt(0) + rules.get(entry.getKey());
+            String key2 = rules.get(entry.getKey()) + entry.getKey().charAt(1);
 
-            if (pairs.get(pair) > 0) {
-                newPairs.put(key1, newPairs.containsKey(key1) ? newPairs.get(key1) + pairs.get(pair) : 1L);
-                newPairs.put(key2, newPairs.containsKey(key2) ? newPairs.get(key2) + pairs.get(pair) : 1L);
+            if (pairs.get(entry.getKey()) > 0) {
+                newPairs.put(key1, newPairs.containsKey(key1) ? newPairs.get(key1) + pairs.get(entry.getKey()) : 1L);
+                newPairs.put(key2, newPairs.containsKey(key2) ? newPairs.get(key2) + pairs.get(entry.getKey()) : 1L);
             }
         }
         return newPairs;
