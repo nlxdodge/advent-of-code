@@ -24,18 +24,17 @@ public class AOC14 {
             Long tenStepResult = 0L;
             int maxSteps = 40;
             for (int step = 1; step <= maxSteps; step++) {
-                for(Entry<String, Long> entry : parseStep(polymer, rules).entrySet()) {
-                    polymer.merge(entry.getKey(), entry.getValue(), Long::sum);
-                }
-                if (step == 5) {
-                    System.out.println("Step 5:");
+                polymer = parseStep(polymer, rules);
+                if (step == 10) {
+                    System.out.println(String.format("Step %s:", step));
                     Map<String, Long> countMap = mapToSingleChar(polymer);
                     tenStepResult = subTractHighestLowest(countMap);
                 }
             }
 
             Long result1 = tenStepResult;
-            Long result2 = subTractHighestLowest(polymer);
+            Map<String, Long> countMap = mapToSingleChar(polymer);
+            Long result2 = subTractHighestLowest(countMap);
             System.out.println(String.format("Result 1: %s", result1));
             System.out.println(String.format("Result 2: %s", result2));
         }
@@ -43,7 +42,7 @@ public class AOC14 {
 
     private static Map<String, Long> mapToSingleChar(Map<String, Long> polymer) {
         Map<String, Long> countMap = new HashMap<>();
-        // countMap.put("B", 1L);
+        countMap.put("K", 1L);
         for (Entry<String, Long> entry : polymer.entrySet()) {
             String key = "" + entry.getKey().charAt(0);
             countMap.putIfAbsent(key, 0L);
@@ -89,15 +88,17 @@ public class AOC14 {
         return rules;
     }
 
-    private static Map<String, Long> parseStep(Map<String, Long> pairs, Map<String, String> rules) {
+    private static Map<String, Long> parseStep(Map<String, Long> polymer, Map<String, String> rules) {
         HashMap<String, Long> newPairs = new HashMap<>();
-        for (Entry<String, Long> entry : pairs.entrySet()) {
-            String key1 = entry.getKey().charAt(0) + rules.get(entry.getKey());
-            String key2 = rules.get(entry.getKey()) + entry.getKey().charAt(1);
+        for (Entry<String, Long> entry : polymer.entrySet()) {
+            String newPair1 = entry.getKey().charAt(0) + rules.get(entry.getKey());
+            String newPair2 = rules.get(entry.getKey()) + entry.getKey().charAt(1);
 
-            if (pairs.get(entry.getKey()) > 0) {
-                newPairs.put(key1, newPairs.containsKey(key1) ? newPairs.get(key1) + pairs.get(entry.getKey()) : 1L);
-                newPairs.put(key2, newPairs.containsKey(key2) ? newPairs.get(key2) + pairs.get(entry.getKey()) : 1L);
+            long orignialCount = polymer.get(entry.getKey());
+
+            if (orignialCount > 0) {
+                newPairs.put(newPair1, newPairs.containsKey(newPair1) ? newPairs.get(newPair1) + orignialCount : orignialCount);
+                newPairs.put(newPair2, newPairs.containsKey(newPair2) ? newPairs.get(newPair2) + orignialCount : orignialCount);
             }
         }
         return newPairs;
