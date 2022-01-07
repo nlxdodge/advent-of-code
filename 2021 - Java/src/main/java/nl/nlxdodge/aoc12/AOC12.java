@@ -11,7 +11,8 @@ import java.util.stream.Stream;
 
 public class AOC12 {
     private static final String FOLDER_NAME = MethodHandles.lookup().lookupClass().getSimpleName().toLowerCase();
-    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt", FOLDER_NAME);
+    private static final String FILE_PATH = String.format("./2021 - Java/src/main/java/nl/nlxdodge/%s/input.txt",
+            FOLDER_NAME);
 
     public static void main(String[] args) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
@@ -19,9 +20,11 @@ public class AOC12 {
 
             List<Cave> caves = setListOfCaves(list);
 
-            System.out.println(findAllPaths(caves));
+            List<List<Cave>> allRoutes = findAllPaths(caves);
 
-            Integer result1 = findAllPaths(caves).size();
+            System.out.println("All Routes: " + allRoutes);
+
+            int result1 = allRoutes.size();
             System.out.println(String.format("Result 1: %s", result1));
 
             // code for part two
@@ -33,26 +36,44 @@ public class AOC12 {
 
     public static List<List<Cave>> findAllPaths(List<Cave> caves) {
         Optional<Cave> startCave = findCave(caves, "start");
-
         List<List<Cave>> allRoutes = new ArrayList<>();
 
         if (startCave.isPresent()) {
-            traverse(allRoutes, startCave.get(), new ArrayList<>(List.of(startCave.get())));
+            traverse(allRoutes, new ArrayList<>(List.of(startCave.get())), caves);
         }
         return allRoutes;
     }
 
-    public static List<Cave> traverse(List<List<Cave>> allRoutes, Cave cave, List<Cave> route) {
-        for (Cave subCave : cave.getSubCaves()) {
-            if (subCave.canVisit(1)) {
-                System.out.println(String.format("%s -> %s", cave.getName(), subCave.getName()));
+    public static List<Cave> traverse(List<List<Cave>> allRoutes, List<Cave> route, List<Cave> caves) {
+        Cave currentCave = route.get(route.size() - 1);
+        
+        // reset visited if not in route
+        caves.forEach(cave -> {
+            if (!route.contains(cave)) {
+                cave.setVisited(0);
+            }
+        });
+
+        // with the current route get last Cave's subcaves
+        for (Cave subCave : currentCave.getSubCaves()) {
+
+            // can we visit this subcave and is this not in the current allroutes
+            if (subCave.canVisit(1) && !allRoutes.contains(route)) {
+
+                // add subcave to route and set visited
                 route.add(subCave);
-                subCave.setVisited();
-                if (!allRoutes.contains(route) && subCave.getName().equals("end")) {
+                subCave.setVisited(subCave.getVisited() + 1);
+
+                System.out.println(
+                        String.format("%s -> %s (%s)", currentCave.getName(), subCave.getName(),
+                                subCave.canVisit(1)));
+
+                // if last equals end add to Allroutes
+                if (subCave.getName().equals("end")) {
                     System.out.println("New route found: " + route);
                     allRoutes.add(new ArrayList<>(route));
                 } else {
-                    traverse(allRoutes, subCave, new ArrayList<>(route));
+                    traverse(allRoutes, new ArrayList<>(route), caves);
                 }
             }
         }
@@ -116,8 +137,12 @@ class Cave {
         return visitedTimes < times || Character.isUpperCase(name.charAt(0)) || name.equals("end");
     }
 
-    public void setVisited() {
-        visitedTimes += 1;
+    public int getVisited() {
+        return visitedTimes;
+    }
+
+    public void setVisited(int visited) {
+        visitedTimes = visited;
     }
 
     public String toString() {
