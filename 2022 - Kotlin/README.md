@@ -6,12 +6,12 @@
 
 ---
 
-#### Static Methods in Kotlin 
-Have to be made in a companion object like so:
+#### Static Methods in Kotlin work differently
+To have the behaviour to be the same you need to use companion objects which can optionally be named:
 
 ```kotlin
 class Some {
-    companion object {
+    companion object Name {
         val someValue = 1
         fun someMethods() {
             // etc.
@@ -19,6 +19,21 @@ class Some {
     }
 }
 ```
+
+But I found something else, if you then have a main method in this Some class it won't be run as it's not in the correct scope like Java.
+To fix this we need to add something on top of the main constructor.
+
+```kotlin
+@JvmStatic
+fun main() {
+    // ...
+}
+```
+
+While the companion object makes the main method sort of static, it's not picked up by the kotlin compiler as entry. So adding `@JvmStatic` makes it runable.
+
+---
+
 
 ---
 
