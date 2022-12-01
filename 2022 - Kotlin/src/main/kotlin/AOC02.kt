@@ -1,6 +1,6 @@
 import utils.FileUtil
 
-class Template {
+class AOC02 {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
