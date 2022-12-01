@@ -5,8 +5,8 @@ Sublanguages like Kotlin and Typescript also count as another language.
 
 ## Year List
 
-- 2023 - Rust ⚙ (I wanted to try this for a while now)
-- 2022 - Kotlin (A better flavor of Java)
+- 2023 - Rust 🦀 (I wanted to try this for a while now)
+- 2022 - Kotlin 🐱‍👤 (A better flavor of Java)
 - 2021 - Java ☕ (Used at work)
 - 2020 - Python 🐍 (Used in my Minor)
 - 2019 - Ruby 💎 (Used in my internship)
