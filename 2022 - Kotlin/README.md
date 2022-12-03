@@ -8,7 +8,9 @@ After getting on board with Java I found out that Kotlin exists, and even as we 
 for Android. So might as well check out if Kotlin is any fun to program in right?
 
 1. ⭐⭐
-2.
+2. ⭐⭐
+3. ⭐⭐
+4. 
 
 ---
 
@@ -75,6 +77,35 @@ var theMap = hashMapOf(-3 to 0, -2 to 0, -1 to 0)
 The syntax is just way easier, but has a learning curve to it 😉
 
 ### Day 2
+
+Working with chars, fascinating! Want to get the number of a char? Use `charVar.code`
+
+
+### Day 3
+
+Day 3 was more search work and I finally got my Kotlin compiler working fast on my new work laptop.
+Things I learned today where:
+
+Rounding a double is as easy as ever
+```kotlin
+(line.length / 2).toDouble().roundToInt()
+```
+
+An inline if statement with a question mark doesn't exist and is now normal code
+```kotlin
+val multiplier = if (chr.isUpperCase()) 70 else 96
+```
+
+Want to split a list or array into chunks of three?
+```kotlin
+val splitList = yourList.chunk(3)
+```
+
+And lastly how to get the upper or lowercase version of some character
+```kotlin
+chr.lowercaseChar() // or
+chr.uppercaseChar()
+```
 
 
 
