@@ -13,14 +13,14 @@ class Template {
             println("Day 1 result 2: $part2")
         }
 
-        fun part1(input: List<String>): String {
+        private fun part1(input: List<String>): String {
             for (line in input) {
                 println("Line: $line")
             }
             return input.first()
         }
 
-        fun part2(input: List<String>): String {
+        private fun part2(input: List<String>): String {
             return input.first()
         }
     }
