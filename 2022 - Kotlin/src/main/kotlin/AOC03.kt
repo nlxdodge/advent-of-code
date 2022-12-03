@@ -22,7 +22,7 @@ class AOC03 {
                 val last = line.substring(half, line.length)
                 for (chr in first) {
                     if (last.contains(chr)) {
-                        totalScore += calculateScore(chr)
+                        totalScore += calculatePriority(chr)
                         break
                     }
                 }
@@ -35,7 +35,7 @@ class AOC03 {
             for (lines in input.chunked(3)) {
                 for (chr in lines[0]) {
                     if (lines[1].contains(chr) && lines[2].contains(chr)) {
-                        totalScore += calculateScore(chr)
+                        totalScore += calculatePriority(chr)
                         break
                     }
                 }
@@ -43,7 +43,7 @@ class AOC03 {
             return totalScore.toString()
         }
 
-        private fun calculateScore(chr: Char): Int {
+        private fun calculatePriority(chr: Char): Int {
             return (chr.lowercaseChar() - (if (chr.isUpperCase()) 70 else 96)).code
         }
     }
