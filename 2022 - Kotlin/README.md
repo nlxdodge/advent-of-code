@@ -1,4 +1,4 @@
-# Advent of code year 2022
+# Advent of code 2022 - Kotlin
 
 ---
 

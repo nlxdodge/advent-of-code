@@ -14,7 +14,7 @@ class AOC03 {
             println("Day 3 result 2: $part2")
         }
 
-        fun part1(input: List<String>): String {
+        private fun part1(input: List<String>): String {
             var totalScore = 0
             for (line in input) {
                 val half = (line.length / 2).toDouble().roundToInt()
@@ -22,7 +22,7 @@ class AOC03 {
                 val last = line.substring(half, line.length)
                 for (chr in first) {
                     if (last.contains(chr)) {
-                        totalScore += (chr.lowercaseChar() - (if (chr.isUpperCase()) 70 else 96)).code
+                        totalScore += calculateScore(chr)
                         break
                     }
                 }
@@ -30,17 +30,21 @@ class AOC03 {
             return totalScore.toString()
         }
 
-        fun part2(input: List<String>): String {
+        private fun part2(input: List<String>): String {
             var totalScore = 0
             for (lines in input.chunked(3)) {
-                for (chr in lines.get(0)) {
+                for (chr in lines[0]) {
                     if (lines[1].contains(chr) && lines[2].contains(chr)) {
-                        totalScore += (chr.lowercaseChar() - (if (chr.isUpperCase()) 70 else 96)).code
+                        totalScore += calculateScore(chr)
                         break
                     }
                 }
             }
             return totalScore.toString()
+        }
+
+        private fun calculateScore(chr: Char): Int {
+            return (chr.lowercaseChar() - (if (chr.isUpperCase()) 70 else 96)).code
         }
     }
 }
