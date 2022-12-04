@@ -1,12 +1,15 @@
 package utils
 
 import java.io.File
-import java.util.stream.Stream
 
 class FileUtil {
     companion object {
-        fun getFileStream(fileName: String): Stream<String> {
-            return getFile(fileName).useLines { it.toList().stream() }
+        fun getDay(): String {
+            val fileName = Throwable().stackTrace[1].fileName
+            if (fileName != null) {
+                return fileName.substring(3, 5)
+            }
+            return "01"
         }
 
         fun getFileList(fileName: String): List<String> {
