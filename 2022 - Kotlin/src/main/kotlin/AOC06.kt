@@ -15,36 +15,25 @@ class AOC06 {
         }
 
         private fun part1(input: List<String>): String {
-            val markerSize = 4
-            var startMarker = 0
-            for (index in input[0].indices) {
-                startMarker = index
-                val list = mutableListOf<Char>()
-                for (parseIndex in 1..markerSize) {
-                    list.add(input[0][index + parseIndex])
-                }
-                if (list.distinct().size == markerSize) {
-                    break
-                }
-            }
-            return (startMarker + markerSize + 1).toString()
+            return getMarker(input, 4)
         }
 
 
         private fun part2(input: List<String>): String {
-            val markerSize = 14
-            var startMarker = 0
+            return getMarker(input, 14)
+        }
+
+        private fun getMarker(input: List<String>, markerSize: Int = 4): String {
             for (index in input[0].indices) {
-                startMarker = index
                 val list = mutableListOf<Char>()
                 for (parseIndex in 1..markerSize) {
                     list.add(input[0][index + parseIndex])
                 }
                 if (list.distinct().size == markerSize) {
-                    break
+                    return (index + markerSize + 1).toString()
                 }
             }
-            return (startMarker + markerSize + 1).toString()
+            return ""
         }
     }
 }
