@@ -56,7 +56,7 @@ fun main() {
 ``` 
 
 While the companion object makes the main method sort of static, it's not picked up by the kotlin compiler as entry. So
-adding `@JvmStatic` makes it runable.
+adding `@JvmStatic` makes it run-able.
 
 ### Day 1
 
@@ -70,7 +70,7 @@ elfCalories.values.sum().toString()
 
 #### Casting to other types
 
-Same as converting Strings to Int(eger)
+Same as converting Strings to Int
 
 ```kotlin
 stringValue.toInt()
@@ -78,7 +78,7 @@ stringValue.toInt()
 
 #### Or just initializing a new HashMap
 
-But I still have to learn more sytax because I had no idea that you had to make a hashmap like this
+But I still have to learn more syntax because I had no idea that you had to make a hashmap like this
 
 ```kotlin
 var theMap = hashMapOf(-3 to 0, -2 to 0, -1 to 0)
@@ -126,7 +126,7 @@ I was refactoring some code to make it more dynamic, and with this little snippe
 AOC01,AOC02 etc. from within another class because of the StackTracing.
 
 ```kotlin
-var calledFromFilename = Throwable().stackTrace[1].fileName
+var calledFromFilename: String? = Throwable().stackTrace[1].fileName
 ```
 
 ### Day 5
@@ -154,3 +154,37 @@ if (list.distinct().size == markerSize) {
 ```
 
 This way I could easily break the for loop when all the items where unique, else I just continue to search.
+
+### Day 7
+
+This was a big day again where I didn't do something correctly and made an assumption so my time went up
+But I did learn a couple of new things.
+
+When you have the Folder structure like we had in Day 7 I first mapped the directory size to ints and then summed them.
+But using the sumOf does the mapping for you as well.
+
+*We had to search all folders where the size doesn't exceed 100.000*
+
+```kotlin
+return findDirSizes(rootFolder, 100_000, false).sumOf { folder -> folder.getDirSize() }.toString()
+```
+
+This also works for `minOf` and `maxOf`.
+
+*We had to calculate the smallest folder (that met size criteria) to delete in order to continue*
+
+```kotlin
+return findDirSizes(
+    rootFolder,
+    30_000_000 - (70_000_000 - rootFolder.getDirSize()),
+    true
+).minOf { folder -> folder.getDirSize() }.toString()
+```
+
+Getting the size of sub folders I refactored to one line.
+
+```kotlin
+fun getDirSize(): Int {
+    return subFolders.sumOf { it.getDirSize() } + files.sumOf { it.size }
+}
+```

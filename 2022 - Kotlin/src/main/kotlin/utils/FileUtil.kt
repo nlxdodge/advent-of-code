@@ -12,8 +12,8 @@ class FileUtil {
             return "01"
         }
 
-        fun getFileList(fileName: String): List<String> {
-            return getFile(fileName).useLines { it.toList() }
+        fun getFileList(fileName: String): MutableList<String> {
+            return getFile(fileName).useLines { it.toMutableList() }
         }
 
         private fun getFile(fileName: String): File {
