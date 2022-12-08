@@ -74,45 +74,50 @@ class AOC08 {
             var muls = mutableListOf(0, 0, 0, 0)
             val treeHeight = grid[pos.first][pos.last].first
             var posCheck = 1
-            while (pos.last + posCheck < grid.size - 1) {
+            while (pos.last + posCheck <= grid.size - 1) {
                 if (grid[pos.first][pos.last + posCheck].first >= treeHeight) {
-                    var mul = posCheck
-                    mul -= if (grid[pos.first][pos.last + posCheck].first == treeHeight) 1 else 0
-                    muls[0] = mul
+                    muls[0] = posCheck
                     break
+                }
+                if (pos.last + posCheck >= grid.size - 1) {
+                    muls[0] = posCheck
                 }
                 posCheck += 1
             }
             posCheck = 1
-            while (pos.last - posCheck > 0) {
+            while (pos.last - posCheck >= 0) {
                 if (grid[pos.first][pos.last - posCheck].first >= treeHeight) {
-                    var mul = posCheck
-                    mul -= if (grid[pos.first][pos.last - posCheck].first == treeHeight) 1 else 0
-                    muls[1] = mul
+                    muls[1] = posCheck
                     break
+                }
+                if (pos.last - posCheck <= 0) {
+                    muls[1] = posCheck
                 }
                 posCheck += 1
             }
             posCheck = 1
-            while (pos.first + posCheck < grid.size - 1) {
+            while (pos.first + posCheck <= grid.size - 1) {
                 if (grid[pos.first + posCheck][pos.last].first >= treeHeight) {
-                    var mul = posCheck
-                    mul -= if (grid[pos.first + posCheck][pos.last].first == treeHeight) 1 else 0
-                    muls[2] = mul
+                    muls[2] = posCheck
                     break
+                }
+                if (pos.first + posCheck >= grid.size - 1) {
+                    muls[2] = posCheck
                 }
                 posCheck += 1
             }
             posCheck = 1
-            while (pos.first - posCheck > 0) {
+            while (pos.first - posCheck >= 0) {
                 if (grid[pos.first - posCheck][pos.last].first >= treeHeight) {
-                    var mul = posCheck
-                    mul -= if (grid[pos.first - posCheck][pos.last].first == treeHeight) 1 else 0
-                    muls[3] = mul
+                    muls[3] = posCheck
                     break
+                }
+                if (pos.first - posCheck <= 0) {
+                    muls[3] = posCheck
                 }
                 posCheck += 1
             }
+
             return muls[0] * muls[1] * muls[2] * muls[3]
         }
 
