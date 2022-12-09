@@ -28,6 +28,7 @@ class AOC09 {
             var hPos = IntRange((grid.size - 1) / 2, (grid.size - 1) / 2)
             var oldHPos: IntRange
             var tPos = IntRange((grid.size - 1) / 2, (grid.size - 1) / 2)
+            grid[tPos.first][tPos.last] = "#"
 
             for (command in input) {
                 val times = command.slice(IntRange(2, command.length - 1))
@@ -35,7 +36,6 @@ class AOC09 {
                     oldHPos = hPos
                     if (command.startsWith("R")) {
                         hPos = IntRange(hPos.first, hPos.last + 1)
-
                     }
                     if (command.startsWith("L")) {
                         hPos = IntRange(hPos.first, hPos.last - 1)
@@ -55,8 +55,8 @@ class AOC09 {
                 }
 
             }
-//            print(grid, IntRange(-1, -1), IntRange(-1, -1))
-            return (grid.sumOf { it.count { x -> x == "#" } } + 1).toString()
+            print(grid, IntRange(-1, -1), IntRange(-1, -1))
+            return (grid.sumOf { it.count { x -> x == "#" } }).toString()
         }
 
         private fun moveT(): IntRange {
@@ -90,8 +90,8 @@ class AOC09 {
                 }
                 builder.append("\r\n")
             }
-//            FileUtil.writeToFile(builder.toString())
-            println(builder.toString())
+            FileUtil.writeToFile(builder.toString())
+//            println(builder.toString())
         }
     }
 }
