@@ -16,7 +16,7 @@ class AOC09 {
         }
 
         private fun part1(input: List<String>): String {
-            val size = 100
+            val size = 10
             val grid = mutableListOf<MutableList<String>>()
             for (x in 1..size) {
                 val lists = mutableListOf<String>()
@@ -25,9 +25,9 @@ class AOC09 {
                 }
                 grid.add(lists)
             }
-            var hPos = IntRange(grid.size - 1, 0)
-            var oldHPos = hPos
-            var tPos = IntRange(grid.size - 1, 0)
+            var hPos = IntRange((grid.size - 1) / 2, (grid.size - 1) / 2)
+            var oldHPos: IntRange
+            var tPos = IntRange((grid.size - 1) / 2, (grid.size - 1) / 2)
 
             for (command in input) {
                 val times = command.slice(IntRange(2, command.length - 1))
@@ -77,8 +77,7 @@ class AOC09 {
                 }
             }
             print(grid, IntRange(-1, -1), IntRange(-1, -1))
-            grid[grid.size - 1][0] = "s"
-            return grid.sumOf { it.count { x -> x == "#" } }.toString()
+            return (grid.sumOf { it.count { x -> x == "#" } } - 1).toString()
         }
 
         private fun part2(input: List<String>): String {
