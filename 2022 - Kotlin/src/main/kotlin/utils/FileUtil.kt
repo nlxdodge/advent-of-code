@@ -16,6 +16,16 @@ class FileUtil {
             return getFile(fileName).useLines { it.toMutableList() }
         }
 
+        fun writeToFile(fileName: String, text: String) {
+            val file = File(fileName)
+            file.createNewFile()
+            file.writeText(text)
+        }
+
+        fun writeToFile(text: String) {
+            writeToFile("output.txt", text)
+        }
+
         private fun getFile(fileName: String): File {
             return File("src/main/resources/$fileName")
         }
