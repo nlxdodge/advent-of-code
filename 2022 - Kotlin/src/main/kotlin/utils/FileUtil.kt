@@ -12,6 +12,10 @@ class FileUtil {
             return "01"
         }
 
+        fun getFileString(fileName: String): String {
+            return getFile(fileName).readText()
+        }
+
         fun getFileList(fileName: String): MutableList<String> {
             return getFile(fileName).useLines { it.toMutableList() }
         }
