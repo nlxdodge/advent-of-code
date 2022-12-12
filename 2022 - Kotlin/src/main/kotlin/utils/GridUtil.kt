@@ -8,9 +8,17 @@ class GridUtil {
             for (x in 1..size) {
                 val lists = mutableListOf<String>()
                 for (y in 1..size) {
-                    lists.add(char.toString())
+                    lists.add(char)
                 }
                 grid.add(lists)
+            }
+            return grid
+        }
+
+        fun generateMutableGridWithInput(input: List<String>): MutableList<MutableList<String>> {
+            val grid = mutableListOf<MutableList<String>>()
+            for (line in input) {
+                grid.add(line.toCharArray().map { it.toString() }.toMutableList())
             }
             return grid
         }
