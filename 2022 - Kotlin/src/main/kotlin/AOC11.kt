@@ -44,9 +44,7 @@ class AOC11 {
                     }
                 }
             }
-
-            monkeys.sortBy { x -> x.inspections }
-            return monkeys.takeLast(2).map { monkey -> monkey.inspections }.reduce { x, y -> x * y }.toString()
+            return monkeys.map { it.inspections }.sortedDescending().take(2).reduce { x, y -> x * y }.toString()
         }
 
         private fun part2(inputs: List<String>): String {
@@ -66,12 +64,14 @@ class AOC11 {
                 )
             }
             val rounds = 10_000
+            val modulo = monkeys.map { it.testOn }.reduce { x, y -> x * y }
             for (round in 1..rounds) {
                 for (monkey in monkeys) {
                     while (monkey.items.iterator().hasNext()) {
                         val item = monkey.items.iterator().next()
                         item.inspect(monkey.getOperation())
                         monkey.inspections++
+                        item.boredom(modulo)
                         monkeys[monkey.monkeyId].items.remove(item)
                         monkeys[monkey.testItem(item)].items.add(item)
                     }
@@ -90,28 +90,19 @@ class Monkey(
     private val operation: String,
     private val operationValue: String,
     val testOn: Long,
-    val trueThrowTo: Int,
-    val falseThrowTo: Int,
+    private val trueThrowTo: Int,
+    private val falseThrowTo: Int,
     var inspections: Long = 0,
 ) {
 
     fun getOperation(): (Long) -> Long {
         if (operationValue == "old") {
-            when (operation) {
-                "+" -> return { it: Long -> it + it }
-                "-" -> return { 0 }
-                "*" -> return { it: Long -> it * it }
-                "/" -> return { it: Long -> it / it }
-                else -> return { it: Long -> it * it }
-            }
+            return { it: Long -> it * it }
         }
-        val operationValueInt = operationValue.toLong()
         when (operation) {
-            "+" -> return { it: Long -> it + operationValueInt }
-            "-" -> return { it: Long -> it - operationValueInt }
-            "*" -> return { it: Long -> it * operationValueInt }
-            "/" -> return { it: Long -> it / operationValueInt }
-            else -> return { it: Long -> it * operationValueInt }
+            "+" -> return { it: Long -> it + operationValue.toLong() }
+            "*" -> return { it: Long -> it * operationValue.toLong() }
+            else -> return { it: Long -> it * operationValue.toLong() }
         }
     }
 
@@ -130,10 +121,10 @@ class Monkey(
 
 class Item(var value: Long) {
     fun inspect(operation: (Long) -> Long) {
-        val pre = value
-        value = operation.invoke(value) % 1475
-        if (value > pre) {
-            println("OVERFLOW")
+        val old = value
+        value = operation.invoke(value)
+        if (value < old) {
+            println("WAAA")
         }
     }
 
@@ -141,7 +132,11 @@ class Item(var value: Long) {
         return "Item: $value"
     }
 
-    fun boredom() {
-        value = (value / 3).toDouble().roundToLong()
+    fun boredom(modulo: Long = 0) {
+        value = if (modulo == 0L) {
+            (value / 3).toDouble().roundToLong()
+        } else {
+            (value % modulo).toDouble().roundToLong()
+        }
     }
 }
