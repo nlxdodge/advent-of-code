@@ -7,17 +7,53 @@ class AOC14 {
         fun main(args: Array<String>) {
             val day = FileUtil.getDay()
             val lines = FileUtil.getFileList("AOC$day.txt")
-            val grid = GridUtil.generateMutableGrid(600, ".")
 
-            val part1 = part1(grid, lines)
+            val part1 = part1(lines)
             val part2 = part2(lines)
 
             println("Day $day result 1: $part1")
             println("Day $day result 2: $part2")
         }
 
-        private fun part1(grid: MutableList<MutableList<String>>, lines: MutableList<String>): String {
-            var drawGrid = grid
+        private fun part1(lines: MutableList<String>, part2: Boolean = false): String {
+            val grid = drawLines(lines)
+            GridUtil.gridToFile("grid", grid)
+            var sandPos = IntRange(500, 0)
+            while (true) {
+                val posBelow = IntRange(sandPos.first, sandPos.last + 1)
+                val posBelowLeft = IntRange(sandPos.first + 1, sandPos.last + 1)
+                val posBelowRight = IntRange(sandPos.first - 1, sandPos.last + 1)
+                // break if input is stuck
+                if (grid[sandPos.first][sandPos.last] == "0" && part2) {
+                    break
+                }
+                // break if abyss
+                if ((posBelow.last >= grid[0].size || posBelow.first >= grid.size) && !part2) {
+                    break
+                }
+                if (grid[posBelow.first][posBelow.last] == ".") {
+                    sandPos = posBelow
+                } else if (grid[posBelowRight.first][posBelowRight.last] == ".") {
+                    sandPos = posBelowRight
+                } else if (grid[posBelowLeft.first][posBelowLeft.last] == ".") {
+                    sandPos = posBelowLeft
+                } else {
+                    grid[sandPos.first][sandPos.last] = "0"
+                    sandPos = IntRange(500, 0)
+                    continue
+                }
+            }
+            GridUtil.gridToFile("test", grid)
+            return grid.flatten().count { it == "0" }.toString()
+        }
+
+        private fun part2(input: MutableList<String>): String {
+            return part1(input, true)
+        }
+
+        private fun drawLines(lines: MutableList<String>): MutableList<MutableList<String>> {
+            val depth = lines.flatMap { it.split(" -> ") }.map { it.split(",")[1] }.maxOf { it.toInt() } + 3
+            var drawGrid = GridUtil.generateMutableGrid(IntRange(2000, depth), ".")
             for (line in lines) {
                 val lineCords = mutableListOf<IntRange>()
                 val cordsPairs = line.split(" -> ")
@@ -31,54 +67,7 @@ class AOC14 {
                     }
                 }
             }
-
-
-            // do sand emulation
-            var abyss = false
-            var sandPos = IntRange(500, 0)
-            while (!abyss) {
-                val posBelow = IntRange(sandPos.first, sandPos.last + 1)
-                var posBelowLeft = IntRange(sandPos.first + 1, sandPos.last + 1)
-                var posBelowRight = IntRange(sandPos.first - 1, sandPos.last + 1)
-                if(grid[sandPos.first][sandPos.last] == "0") {
-                    GridUtil.gridToFile("test", grid)
-                    throw Exception("Valve is stuck with sand it's not ging in the abyss")
-                }
-
-                if(posBelow.last > grid.size) {
-                    abyss = true
-                }
-                if (grid[posBelow.first][posBelow.last] == ".") {
-                    sandPos = posBelow
-                    continue
-                } else {
-                    while(grid[posBelowLeft.first][posBelowLeft.last] == ".") {
-                        if (grid[posBelowLeft.first][posBelowLeft.last] != ".") {
-                            grid[posBelowLeft.first][posBelowLeft.last] = "0"
-                            sandPos = IntRange(500, 0)
-                            continue
-                        }
-                        posBelowLeft = IntRange(posBelowLeft.first + 1, posBelowLeft.last + 1)
-                    }
-                    while(grid[posBelowRight.first][posBelowRight.last] == ".") {
-                        if (grid[posBelowRight.first][posBelowRight.last] != ".") {
-                            grid[posBelowRight.first][posBelowRight.last] = "0"
-                            sandPos = IntRange(500, 0)
-                            continue
-                        }
-                        posBelowRight = IntRange(posBelowRight.first + 1, posBelowRight.last + 1)
-                    }
-                    grid[sandPos.first][sandPos.last] = "0"
-                    sandPos = IntRange(500, 0)
-                    continue
-                }
-            }
-            GridUtil.gridToFile("test", grid)
-            return ""
-        }
-
-        private fun part2(input: List<String>): String {
-            return ""
+            return drawGrid
         }
     }
 }

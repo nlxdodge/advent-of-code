@@ -1,15 +1,13 @@
 package utils
 
-import java.lang.StringBuilder
-
 class GridUtil {
 
     companion object {
-        fun generateMutableGrid(size: Int, char: String = "."): MutableList<MutableList<String>> {
+        fun generateMutableGrid(size: IntRange, char: String = "."): MutableList<MutableList<String>> {
             val grid = mutableListOf<MutableList<String>>()
-            for (x in 1..size) {
+            for (x in 1..size.first) {
                 val lists = mutableListOf<String>()
-                for (y in 1..size) {
+                for (y in 1..size.last) {
                     lists.add(char)
                 }
                 grid.add(lists)

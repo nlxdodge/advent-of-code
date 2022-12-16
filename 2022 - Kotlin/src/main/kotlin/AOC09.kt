@@ -17,7 +17,7 @@ class AOC09 {
         }
 
         private fun part1(input: List<String>): String {
-            val grid = generateMutableGrid(800)
+            val grid = generateMutableGrid(IntRange(800, 800))
             var hPos = IntRange((grid.size - 1) / 2, (grid.size - 1) / 2)
             var oldHPos: IntRange
             var tPos = IntRange((grid.size - 1) / 2, (grid.size - 1) / 2)
@@ -51,7 +51,7 @@ class AOC09 {
         }
 
         private fun part2(input: List<String>): String {
-            var grid = generateMutableGrid(30)
+            var grid = generateMutableGrid(IntRange(30, 30))
 
             val snakes = mutableListOf<SnakeNode>()
 
