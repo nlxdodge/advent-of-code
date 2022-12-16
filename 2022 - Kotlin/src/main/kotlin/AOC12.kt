@@ -42,7 +42,7 @@ class AOC12 {
                 }
                 openSet.remove(current)
                 val neighbors = findNeighbors(grid, current).sortedByDescending { it.height }
-                for (neighbor in neighbors) {
+                for (neighbor in neighbors.filter { it != current }) {
                     if (zeroOrOneOf(neighbor.height, current.height)) {
                         cameFrom[neighbor] = current
                         if (!openSet.contains(neighbor)) {
@@ -73,8 +73,8 @@ class AOC12 {
 
         fun bg(n: Int) = "\u001b[48;5;${n}m"
 
-        private fun reConstructPath(cameFrom: MutableMap<Node, Node>, current: Node): MutableList<Node> {
-            var subCurrent = current
+        private fun reConstructPath(cameFrom: MutableMap<Node, Node>, start: Node): MutableList<Node> {
+            var subCurrent = start
             val path = mutableListOf(subCurrent)
             while (cameFrom.containsKey(subCurrent)) {
                 subCurrent = cameFrom[subCurrent]!!
@@ -84,14 +84,10 @@ class AOC12 {
         }
 
         private fun zeroOrOneOf(neighbor: Int, current: Int): Boolean {
-            var calcCurrent = current
-            var calcNeighbor = neighbor
-            if (calcCurrent == calcNeighbor)
+            if (current + 1 == neighbor)
                 return true
-
-            if (calcCurrent + 1 == calcNeighbor)
+            if (current == neighbor)
                 return true
-
             return false
         }
 
@@ -122,7 +118,7 @@ class AOC12 {
             for (column in grid) {
                 for (node in column) {
                     if (node in path) {
-                        print("${bg(40)}${node.height.toChar()}")
+                        print("${bg(60)}${node.height.toChar()}")
                     } else {
                         print("${node.height.toChar()}")
                     }
