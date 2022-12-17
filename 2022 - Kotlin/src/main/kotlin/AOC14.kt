@@ -17,8 +17,13 @@ class AOC14 {
 
         private fun part1(lines: MutableList<String>, part2: Boolean = false): String {
             val grid = drawLines(lines)
-            GridUtil.gridToFile("grid", grid)
             var sandPos = IntRange(500, 0)
+            if(part2) {
+                for(line in grid) {
+                    line[line.size - 1] = "█"
+                }
+            }
+            GridUtil.gridToFile("grid", grid)
             while (true) {
                 val posBelow = IntRange(sandPos.first, sandPos.last + 1)
                 val posBelowLeft = IntRange(sandPos.first + 1, sandPos.last + 1)
@@ -53,7 +58,7 @@ class AOC14 {
 
         private fun drawLines(lines: MutableList<String>): MutableList<MutableList<String>> {
             val depth = lines.flatMap { it.split(" -> ") }.map { it.split(",")[1] }.maxOf { it.toInt() } + 3
-            var drawGrid = GridUtil.generateMutableGrid(IntRange(2000, depth), ".")
+            var drawGrid = GridUtil.generateMutableGrid(IntRange(750, depth), ".")
             for (line in lines) {
                 val lineCords = mutableListOf<IntRange>()
                 val cordsPairs = line.split(" -> ")
