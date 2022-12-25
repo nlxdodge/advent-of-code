@@ -1,3 +1,3 @@
 
-rootProject.name = "kotlin-playground"
+rootProject.name = "aoc-2022-kotlin"
 
