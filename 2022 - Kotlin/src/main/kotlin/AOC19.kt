@@ -70,7 +70,7 @@ class BluePrint(bluePrintLine: String) {
     }
 
     private fun constructRobot() {
-        if (ore >= oreRobotCost && oreRobots < oreRobotCost) {
+        if (ore >= oreRobotCost && (oreRobots < oreRobotCost || oreRobots < clayRobotCost)) {
             oreRobots++
             ore -= oreRobotCost
             return
