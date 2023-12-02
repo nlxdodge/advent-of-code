@@ -63,8 +63,8 @@ fn main() {
 
     let star2: i32 = games.iter().map(|g| g.calculate_lowest_cubes()).sum();
 
-    println!("Day 1 ⭐1️⃣  result: {}", star1);
-    println!("Day 1 ⭐2️⃣  result: {}", star2);
+    println!("Day 2 ⭐1️⃣  result: {}", star1);
+    println!("Day 2 ⭐2️⃣  result: {}", star2);
 }
 
 struct Game {
