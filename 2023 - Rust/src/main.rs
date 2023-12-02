@@ -96,7 +96,7 @@ struct Subgame {
 impl Subgame {
     fn game_game_exist(&self, max_red: i32, max_green: i32, max_blue: i32) -> bool {
         if max_red >= self.red && max_green >= self.green && max_blue >= self.blue {
-            return true
+            return true;
         }
         false
     }
@@ -104,8 +104,7 @@ impl Subgame {
 
 impl Game {
     fn can_game_exist(&self, max_red: i32, max_green: i32, max_blue: i32) -> bool {
-        self
-            .sub_games
+        self.sub_games
             .iter()
             .all(|sg| sg.game_game_exist(max_red, max_green, max_blue))
     }
