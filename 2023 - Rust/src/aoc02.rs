@@ -8,14 +8,14 @@ fn main() {
 
     let contents: &str = &utils::read_file(filepath.to_string());
 
-    let lines = contents.split("\n");
+    let lines = contents.split('\n');
 
     let games: Vec<Game> = lines
         .clone()
         .filter(|l| !l.is_empty())
         .map(|game| Game {
             id: game
-                .split_once(":")
+                .split_once(':')
                 .unwrap()
                 .0
                 .to_string()
@@ -23,32 +23,47 @@ fn main() {
                 .parse::<i32>()
                 .unwrap(),
             sub_games: game
-                .split_once(":")
+                .split_once(':')
                 .unwrap()
                 .1
                 .to_string()
-                .split(";")
+                .split(';')
                 .map(|sg| Subgame {
                     red: Regex::new(r"\d* red")
                         .unwrap()
                         .find_iter(sg)
-                        .map(|s| s.as_str())
-                        .map(|s| s.split(" ").nth(0).unwrap())
-                        .map(|r| r.parse::<i32>().unwrap())
+                        .map(|s| {
+                            s.as_str()
+                                .split(' ')
+                                .next()
+                                .unwrap()
+                                .parse::<i32>()
+                                .unwrap()
+                        })
                         .sum(),
                     blue: Regex::new(r"\d* blue")
                         .unwrap()
                         .find_iter(sg)
-                        .map(|s| s.as_str())
-                        .map(|s| s.split(" ").nth(0).unwrap())
-                        .map(|r| r.parse::<i32>().unwrap())
+                        .map(|s| {
+                            s.as_str()
+                                .split(' ')
+                                .next()
+                                .unwrap()
+                                .parse::<i32>()
+                                .unwrap()
+                        })
                         .sum(),
                     green: Regex::new(r"\d* green")
                         .unwrap()
                         .find_iter(sg)
-                        .map(|s| s.as_str())
-                        .map(|s| s.split(" ").nth(0).unwrap())
-                        .map(|r| r.parse::<i32>().unwrap())
+                        .map(|s| {
+                            s.as_str()
+                                .split(' ')
+                                .next()
+                                .unwrap()
+                                .parse::<i32>()
+                                .unwrap()
+                        })
                         .sum(),
                 })
                 .collect(),
@@ -81,24 +96,24 @@ struct Subgame {
 impl Subgame {
     fn game_game_exist(&self, max_red: i32, max_green: i32, max_blue: i32) -> bool {
         if max_red >= self.red && max_green >= self.green && max_blue >= self.blue {
-            return true;
+            return true
         }
-        return false;
+        false
     }
 }
 
 impl Game {
     fn can_game_exist(&self, max_red: i32, max_green: i32, max_blue: i32) -> bool {
-        return self
+        self
             .sub_games
             .iter()
-            .all(|sg| sg.game_game_exist(max_red, max_green, max_blue));
+            .all(|sg| sg.game_game_exist(max_red, max_green, max_blue))
     }
 
     fn calculate_lowest_cubes(&self) -> i32 {
         let lowest_red = self.sub_games.iter().map(|sg| sg.red).max().unwrap();
         let lowest_green = self.sub_games.iter().map(|sg| sg.green).max().unwrap();
         let lowest_blue = self.sub_games.iter().map(|sg| sg.blue).max().unwrap();
-        return lowest_red * lowest_green * lowest_blue;
+        lowest_red * lowest_green * lowest_blue
     }
 }

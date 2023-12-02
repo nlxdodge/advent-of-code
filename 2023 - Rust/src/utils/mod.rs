@@ -7,23 +7,15 @@ pub fn day() -> String {
         .file_name()
         .and_then(|s| s.to_str())
         .unwrap();
+    let char_one: char = file_name.chars().nth(3).unwrap_or('0');
+    let char_two: char = file_name.chars().nth(4).unwrap_or('0');
 
-
-    let char_one: char = match file_name.chars().nth(3) {
-        None => '0',
-        Some(d) => d
-    };
-    let char_two: char = match file_name.chars().nth(4) {
-        None => '0',
-        Some(d) => d
-    };
-
-    return format!("{}{}", char_one, char_two);
+    format!("{}{}", char_one, char_two)
 }
 
 pub fn read_file(filepath: String) -> String {
     match fs::read_to_string(filepath) {
-        Ok(contents) => return contents,
-        Err(err) => return format!("Error reading the file: {}", err),
+        Ok(contents) => contents,
+        Err(err) => format!("Error reading the file: {}", err)
     }
 }
