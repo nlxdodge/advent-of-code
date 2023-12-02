@@ -4,10 +4,9 @@ use substring::Substring;
 mod utils;
 
 fn main() {
-    let filepath: &str = "src/inputs/aoc02.txt";
-
-    let contents: &str = &utils::read_file(filepath.to_string());
-
+    let day = 2;
+    let filepath = format!("src/inputs/aoc{:0>2}.txt", day);
+    let contents = &utils::read_file(filepath.to_string());
     let lines = contents.split('\n');
 
     let games: Vec<Game> = lines
@@ -78,8 +77,8 @@ fn main() {
 
     let star2: i32 = games.iter().map(|g| g.calculate_lowest_cubes()).sum();
 
-    println!("Day 2 ⭐1️⃣  result: {}", star1);
-    println!("Day 2 ⭐2️⃣  result: {}", star2);
+    println!("Day {day} ⭐1️⃣  result: {star1}");
+    println!("Day {day} ⭐2️⃣  result: {star2}");
 }
 
 struct Game {
