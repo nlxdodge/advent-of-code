@@ -7,12 +7,12 @@ pub fn read_file(filepath: String) -> String {
     }
 }
 
-pub fn string_to_vec_i32(string: &str) -> Vec<i32> {
+pub fn string_to_vec_i64(string: &str) -> Vec<i64> {
     return string
         .trim()
         .split(' ')
         .collect::<Vec<_>>()
         .iter()
-        .map(|n| n.parse::<i32>().unwrap())
+        .map(|n| n.parse::<i64>().unwrap())
         .collect();
 }
