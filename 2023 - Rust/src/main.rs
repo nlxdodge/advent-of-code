@@ -1,4 +1,5 @@
-use chrono;
+use rayon::prelude::*;
+
 mod utils;
 
 fn main() {
@@ -8,9 +9,6 @@ fn main() {
     let lines: Vec<&str> = contents.lines().collect();
 
     let seeds = &utils::string_to_vec_i64(lines.first().unwrap().split_once(':').unwrap().1);
-    
-
-
     let mut maps: Vec<Map> = vec![];
     let mut ranges: Vec<Range> = vec![];
     let mut from: &str = "";
@@ -74,14 +72,15 @@ fn seed_to_location(seed: &i64, maps: &Vec<Map>) -> i64 {
 }
 
 fn calculate_seed_ranges(initial_seeds: &Vec<i64>, maps: &Vec<Map>) -> i64 {
-    let mut locations = vec![];
-    for pair in initial_seeds.chunks(2) {
-        for number in *pair.get(0).unwrap()..*pair.get(0).unwrap() + pair.get(1).unwrap() {
-            locations.push(seed_to_location(&number, &maps));
-        }
-        println!("Done with a range");
-    }
-    *locations.iter().min().unwrap()
+    initial_seeds.par_chunks(2)
+        .map(|pair| {
+            *pair.first().unwrap()..(pair.first().unwrap() + pair.get(1).unwrap())
+        })
+        .map(|range| {
+            range.map(|number| seed_to_location(&number, maps)).min().unwrap()
+        })
+        .min()
+        .unwrap()
 }
 
 struct Map {
@@ -98,11 +97,11 @@ struct Range {
 
 impl Range {
     fn is_in_range(&self, input: i64) -> bool {
-        input >= self.source_range_start && input <= self.source_range_start + self.range - 1
+        input >= self.source_range_start && input < self.source_range_start + self.range
     }
 
     fn calculate_destination(&self, input: i64) -> i64 {
-        if input >= self.source_range_start && input <= self.source_range_start + self.range - 1 {
+        if input >= self.source_range_start && input < self.source_range_start + self.range {
             return input + (self.destination_range_start - self.source_range_start);
         }
         input
