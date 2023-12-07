@@ -1,4 +1,4 @@
-use std::fs;
+use std::{collections::HashMap, fs};
 
 pub fn read_file(filepath: String) -> String {
     match fs::read_to_string(filepath) {
@@ -27,4 +27,20 @@ pub fn string_to_single_i64(string: &str) -> i64 {
         .join("")
         .parse::<i64>()
         .unwrap()
+}
+
+pub fn string_to_char_count_hashmap(string: &str) -> HashMap<char, i32> {
+    let mut char_map: HashMap<char, i32> = HashMap::new();
+    for chr in string.chars() {
+        char_map.entry(chr).and_modify(|c| *c += 1).or_insert(1);
+    }
+    char_map
+}
+
+pub fn char_count_hashmap_min(char_count: &HashMap<char, i32>) -> i32 {
+    *char_count.iter().map(|t| t.1).min().unwrap()
+}
+
+pub fn char_count_hashmap_max(char_count: &HashMap<char, i32>) -> i32 {
+    *char_count.iter().map(|t| t.1).max().unwrap()
 }
