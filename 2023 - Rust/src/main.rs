@@ -108,45 +108,73 @@ struct Hand {
 
 impl Hand {
     fn calculate_score(&mut self, joker: bool) -> Hand {
-        println!("JOKER TIEM: {}", joker);
         let char_count = utils::string_to_char_count_hashmap(&self.cards);
-        if char_count.len() == 1
-            || (joker && char_count.len() == 2 && *char_count.get(&'J').unwrap_or(&0) >= 1)
+        // 7 Five of a kind
+        if utils::char_count_hashmap_max(&char_count) == 5
+            || (joker
+                && utils::char_count_hashmap_max(&char_count) + *char_count.get(&'J').unwrap_or(&0)
+                    == 5)
         {
             self.rank = 7;
+            return self.clone();
         }
-        if char_count.len() == 2 && utils::char_count_hashmap_max(&char_count) == 4
-            || (joker && char_count.len() >= 3 && *char_count.get(&'J').unwrap_or(&0) >= 1)
+        // 6 Four of a kind
+        if (utils::char_count_hashmap_max(&char_count) == 4)
+            || (joker
+                && utils::char_count_hashmap_max(&char_count) + *char_count.get(&'J').unwrap_or(&0)
+                    == 4)
         {
             self.rank = 6;
+            return self.clone();
         }
-        if char_count.len() == 2
-            && utils::char_count_hashmap_max(&char_count) == 3
-            && utils::char_count_hashmap_min(&char_count) == 2
-            || (joker && char_count.len() == 3 && *char_count.get(&'J').unwrap_or(&0) == 1)
+        // 5 Full house (AAABB -> AAJBB with joker)
+        if (utils::char_count_hashmap_max(&char_count) == 3
+            && utils::char_count_hashmap_min(&char_count) == 2)
+            || (joker
+                && (utils::char_count_hashmap_max(&char_count)
+                    + *char_count.get(&'J').unwrap_or(&0)
+                    == 3
+                    && char_count
+                        .iter()
+                        .filter(|t| t.0 != &'J')
+                        .map(|t| t.1)
+                        .min()
+                        .unwrap()
+                        == &2))
         {
             self.rank = 5;
+            return self.clone();
         }
-        if (char_count.len() == 3) && utils::char_count_hashmap_max(&char_count) == 3
-            || (joker && char_count.len() == 4 && *char_count.get(&'J').unwrap_or(&0) == 1)
+        // 4 Three of a kind
+        if (utils::char_count_hashmap_max(&char_count) == 3)
+            || (joker
+                && utils::char_count_hashmap_max(&char_count) + *char_count.get(&'J').unwrap_or(&0)
+                    == 3)
         {
             self.rank = 4;
+            return self.clone();
         }
-        if (char_count.len() == 3) && utils::char_count_hashmap_max(&char_count) == 2
-            || (joker && char_count.len() == 4 && *char_count.get(&'J').unwrap_or(&0) == 1)
+        // 3 Two Pair
+        if ((char_count.len() == 3) && utils::char_count_hashmap_max(&char_count) == 2)
+            || (joker
+                && utils::char_count_hashmap_min(&char_count) + *char_count.get(&'J').unwrap_or(&0)
+                    == 2
+                && utils::char_count_hashmap_max(&char_count) == 2)
         {
             self.rank = 3;
+            return self.clone();
         }
-        if (char_count.len() == 4) && utils::char_count_hashmap_max(&char_count) == 2
-            || (joker && *char_count.get(&'J').unwrap_or(&0) == 2)
+        // 2 One Pair
+        if ((char_count.len() == 4) && utils::char_count_hashmap_max(&char_count) == 2)
+            || (joker
+                && utils::char_count_hashmap_max(&char_count) + *char_count.get(&'J').unwrap_or(&0)
+                    == 2)
         {
             self.rank = 2;
+            return self.clone();
         }
-        if (char_count.len() == 5) && utils::char_count_hashmap_max(&char_count) == 1
-            || (joker && *char_count.get(&'J').unwrap_or(&0) == 1)
-        {
-            self.rank = 1;
-        }
+        // 1 Regular no matches
+        self.rank = 1;
         self.clone()
     }
 }
