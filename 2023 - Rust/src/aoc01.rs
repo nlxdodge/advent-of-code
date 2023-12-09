@@ -75,11 +75,8 @@ fn find_last_number(line: String, text_search: bool) -> i32 {
         ("enin", 9),
     ]);
     let mut string_number = String::new();
-
-
     for index in 0..line.len() {
         if line.char_at(index).is_alphabetic() && text_search {
-            
             println!(line.substring(index, index + 4));
             for (k, v) in line.substring(index, index + 4) {
                 if string_number.contains(k) {
@@ -91,19 +88,5 @@ fn find_last_number(line: String, text_search: bool) -> i32 {
             return line.char_at(index).to_string().parse::<i32>().unwrap();
         }
     }
-
-    // for chr in line.chars().rev() {
-    //     if chr.is_alphabetic() && text_search {
-    //         string_number = string_number + &chr.to_string();
-    //         for (k, v) in number_mapping {
-    //             if string_number.contains(k) {
-    //                 return v;
-    //             }
-    //         }
-    //     }
-    //     if chr.is_numeric() {
-    //         return chr.to_string().parse::<i32>().unwrap();
-    //     }
-    // }
     return 0;
 }
