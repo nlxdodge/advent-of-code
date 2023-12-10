@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 use std::{collections::HashMap, fs};
 
+use num_integer::Integer;
+
 pub fn read_file(filepath: String) -> String {
     match fs::read_to_string(filepath) {
         Ok(contents) => contents,
@@ -44,4 +46,20 @@ pub fn char_count_hashmap_min(char_count: &HashMap<char, i32>) -> i32 {
 
 pub fn char_count_hashmap_max(char_count: &HashMap<char, i32>) -> i32 {
     *char_count.iter().map(|t| t.1).max().unwrap()
+}
+
+pub fn string_ends_with_char(input: &str, chr: char) -> bool {
+    input.chars().last().unwrap() == chr
+}
+
+pub fn string_nth_char(input: &str, nth: usize) -> char {
+    input.chars().nth(nth).unwrap()
+}
+
+pub fn lcm_vec(values: Vec<i64>) -> i64 {
+    let mut result = 1;
+    for value in values {
+        result = result / result.gcd(&value) * value;
+    }
+    result
 }
