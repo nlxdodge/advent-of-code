@@ -3,113 +3,70 @@ use std::collections::VecDeque;
 mod utils;
 
 fn main() {
-    let day = 8;
+    let day = 9;
     let filepath = format!("src/inputs/aoc{:0>2}.txt", day);
     let contents = &utils::read_file(filepath.to_string());
-    let mut lines: VecDeque<&str> = contents.lines().collect();
+    let lines: VecDeque<&str> = contents.lines().collect();
 
-    let instruction = VecDeque::pop_front(&mut lines).unwrap();
-
-    let nodes: Vec<Node> = lines
+    let sensory_data: Vec<SensoryData> = lines
         .iter()
-        .filter(|l| !l.is_empty())
-        .map(|l| {
-            let complete = l.replace(' ', "");
-            Node {
-                name: complete.split_once('=').unwrap().0.to_string(),
-                left: complete
-                    .split_once('=')
-                    .unwrap()
-                    .1
-                    .split_once(',')
-                    .unwrap()
-                    .0
-                    .replace('(', ""),
-                right: complete
-                    .split_once('=')
-                    .unwrap()
-                    .1
-                    .split_once(',')
-                    .unwrap()
-                    .1
-                    .replace(')', ""),
-            }
+        .map(|d| SensoryData {
+            points: d.split(' ').map(|n| n.parse::<i32>().unwrap()).collect(),
         })
         .collect();
 
-    let star1 = count_towards_z(
-        &nodes,
-        instruction.to_string(),
-        "AAA".to_string(),
-        "ZZZ".to_string(),
-        false,
-    );
-    println!("Day {day} ⭐1️⃣  result: {star1}");
-
-    let starting_nodes = &nodes
+    let calculated_values: Vec<Vec<i32>> = sensory_data.iter().map(|sd| sd.calculate()).collect();
+    let star1: i32 = calculated_values
         .iter()
-        .filter(|n| utils::string_ends_with_char(&n.name, 'A'))
-        .collect::<Vec<_>>();
-    let star2 = utils::lcm_vec(
-        starting_nodes
-            .iter()
-            .map(|n| {
-                count_towards_z(
-                    &nodes,
-                    instruction.to_string(),
-                    n.name.clone(),
-                    "Z".to_string(),
-                    true,
-                )
-            })
-            .map(|n| n.to_string().parse::<i64>().unwrap())
-            .collect(),
-    );
+        .map(|data| data.get(1).unwrap())
+        .sum();
+    let star2: i32 = calculated_values
+        .iter()
+        .map(|data| data.first().unwrap())
+        .sum();
+
+    println!("Day {day} ⭐1️⃣  result: {star1}");
     println!("Day {day} ⭐2️⃣  result: {star2}");
 }
 
-fn find_node(nodes: &[Node], to_find: String) -> &Node {
-    nodes.iter().find(|n| n.name == to_find).unwrap()
+struct SensoryData {
+    points: Vec<i32>,
 }
 
-fn count_towards_z(
-    nodes: &[Node],
-    instruction: String,
-    from: String,
-    to_find: String,
-    last_char: bool,
-) -> i32 {
-    let mut step_counter = 0;
-    let mut instruction_counter = 0;
-    let mut current_instruction = utils::string_nth_char(&instruction, instruction_counter);
-    let mut current_node = find_node(nodes, from);
-    while part_check(current_node.name.clone(), to_find.clone(), last_char) {
-        step_counter += 1;
-        if current_instruction == 'L' {
-            current_node = find_node(nodes, current_node.left.clone())
-        } else {
-            current_node = find_node(nodes, current_node.right.clone())
+impl SensoryData {
+    fn calculate(&self) -> Vec<i32> {
+        let mut last_history: Vec<i32> = vec![];
+        let mut first_history: Vec<i32> = vec![];
+        let mut input = self.points.clone();
+        first_history.push(*input.first().unwrap());
+        last_history.push(*input.last().unwrap());
+        while get_diff(&input).iter().any(|n| n != &0) {
+            input = get_diff(&input);
+            first_history.push(*input.first().unwrap());
+            last_history.push(*input.last().unwrap());
         }
-        instruction_counter += 1;
-        if instruction_counter >= instruction.len() {
-            instruction_counter = 0;
-        }
-        current_instruction = utils::string_nth_char(&instruction, instruction_counter);
-    }
-    step_counter
-}
+        input = get_diff(&input);
+        first_history.push(*input.first().unwrap());
+        last_history.push(*input.last().unwrap());
+        println!("First: {}", first_history.iter().rev().sum::<i32>());
 
-fn part_check(input: String, to_find: String, last_char: bool) -> bool {
-    if last_char {
-        input.chars().nth(2).unwrap().to_string() != to_find
-    } else {
-        input != to_find
+        let mut first_value = 0;
+        for first in first_history {
+            first_value = first;
+        }
+
+
+        vec![
+            first_history.iter().rev().sum(),
+            last_history.iter().rev().sum(),
+        ]
     }
 }
 
-#[derive(Clone, Debug)]
-struct Node {
-    name: String,
-    left: String,
-    right: String,
+fn get_diff(input: &[i32]) -> Vec<i32> {
+    let mut new_input = vec![];
+    for window in input.windows(2) {
+        new_input.push(window[1] - window[0]);
+    }
+    new_input
 }
