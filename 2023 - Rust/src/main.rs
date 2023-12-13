@@ -48,16 +48,22 @@ impl SensoryData {
         input = get_diff(&input);
         first_history.push(*input.first().unwrap());
         last_history.push(*input.last().unwrap());
-        println!("First: {}", first_history.iter().rev().sum::<i32>());
 
-        let mut first_value = 0;
-        for first in first_history {
-            first_value = first;
+        let mut last_first = 0;
+        let mut first_calculated: Vec<i32> = vec![];
+        for first_value in first_history.clone().iter().rev() {
+            if last_first > *first_value {
+                last_first = -first_value;
+            } else {
+                last_first = *first_value;
+            }
+            first_calculated.push(last_first);
+            println!("Next in line is: {}", last_first);
         }
 
-
+        println!("Total: {}", first_calculated.iter().sum::<i32>());
         vec![
-            first_history.iter().rev().sum(),
+            first_calculated.iter().sum(),
             last_history.iter().rev().sum(),
         ]
     }
