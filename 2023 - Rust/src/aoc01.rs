@@ -4,11 +4,9 @@ use substring::Substring;
 mod utils;
 
 fn main() {
-    let filepath: &str = "src/inputs/aoc01.txt";
-
-    let contents: &str = &utils::read_file(filepath.to_string());
-
-    let lines = contents.split("\n");
+    let filepath = format!("src/inputs/aoc{:0>2}.txt", day);
+    let contents = &utils::read_file(filepath.to_string());
+    let lines: Vec<&str> = contents.lines().collect();
 
     let star1: i32 = lines
         .clone()
@@ -77,7 +75,6 @@ fn find_last_number(line: String, text_search: bool) -> i32 {
     let mut string_number = String::new();
     for index in 0..line.len() {
         if line.char_at(index).is_alphabetic() && text_search {
-            println!(line.substring(index, index + 4));
             for (k, v) in line.substring(index, index + 4) {
                 if string_number.contains(k) {
                     return v;

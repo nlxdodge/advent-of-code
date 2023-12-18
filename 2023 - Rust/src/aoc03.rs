@@ -4,7 +4,6 @@ fn main() {
     let day = 3;
     let filepath = format!("src/inputs/aoc{:0>2}.txt", day);
     let contents = &utils::read_file(filepath.to_string());
-
     let lines: Vec<&str> = contents.lines().collect();
 
     let mut engine = vec![vec![' '; lines.len()]; lines.len()];

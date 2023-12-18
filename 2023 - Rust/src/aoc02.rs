@@ -7,7 +7,7 @@ fn main() {
     let day = 2;
     let filepath = format!("src/inputs/aoc{:0>2}.txt", day);
     let contents = &utils::read_file(filepath.to_string());
-    let lines = contents.split('\n');
+    let lines: Vec<&str> = contents.lines().collect();
 
     let games: Vec<Game> = lines
         .clone()
