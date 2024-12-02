@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 
+@SuppressWarnings("unused")
 public class Day02 implements Day {
   
+  @Override
   public String part1() {
     var reports = getInputData();
     
     return "" + reports.stream().filter(this::isReportSafe).count();
   }
   
+  @Override
   public String part2() {
     var reports = getInputData();
     

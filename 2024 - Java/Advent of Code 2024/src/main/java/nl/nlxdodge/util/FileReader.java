@@ -8,23 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileReader {
+  
+  public static List<String> readLines(String resourceName) {
+    List<String> lines = new ArrayList<>();
     
-    public static List<String> readLines(String resourceName) {
-        List<String> lines = new ArrayList<>();
-        
-        try (InputStream stream = FileReader.class.getClassLoader().getResourceAsStream(resourceName)) {
-            if (stream == null) {
-                System.out.printf("File not found: %s", resourceName);
-                return lines;
-            }
-            BufferedReader bf = new BufferedReader(new InputStreamReader(stream));
-            String line;
-            while ((line = bf.readLine()) != null) {
-                lines.add(line);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    try (InputStream stream = FileReader.class.getClassLoader().getResourceAsStream(resourceName)) {
+      if (stream == null) {
+        System.out.printf("File not found: %s", resourceName);
         return lines;
+      }
+      BufferedReader bf = new BufferedReader(new InputStreamReader(stream));
+      String line;
+      while ((line = bf.readLine()) != null) {
+        lines.add(line);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+    return lines;
+  }
 }
