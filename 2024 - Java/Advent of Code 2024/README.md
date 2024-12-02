@@ -11,9 +11,15 @@ before. Luckily it's easy to make a class on your own.
 This was also the first time I have used `Class.forName` to dynamically get a class and to call a method on it. It was easier than
 I expected it to be.
 
-Reminder for myself, don't forget ` Math.abs` last time I forgot it was there and use the min and max functions in the Math class
+Reminder for myself, don't forget `Math.abs` last time I forgot it was there and use the min and max functions in the Math class
 as substitute 🤦🏻
 
 `IntStream.rangeClosed` and `IntStream.range` are also useful if you just want to iterate over something with an index.
 
 ## Day 2
+
+A wild day indeed, I had some difficulty getting up to speed as I was doing some thinking wrong. But just doing a sort after the
+initial `sort()` and `sort(Collections.reverseOrder())` made me eliminate a check for going up or down.
+
+I also learned again that `Collection.remove(object)` does not work with a list like this `[1,2,3,3,4]` as there are multiple `3`
+in the collection.  
