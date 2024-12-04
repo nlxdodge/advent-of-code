@@ -1,101 +1,80 @@
-/**
- * Day04.java
- *
- * Copyright © 2024 ING Group. All rights reserved.
- *
- * This software is the confidential and proprietary information of ING Group ("Confidential Information").
- */
-
 package nl.nlxdodge.days;
-
-import nl.nlxdodge.util.Day;
-import nl.nlxdodge.util.FileReader;
 
 import java.util.ArrayList;
 import java.util.List;
+import nl.nlxdodge.util.Day;
+import nl.nlxdodge.util.FileReader;
 
-/**
- * Add class description here
- */
 public class Day04 implements Day {
+  
   @Override
   public String part1() {
     var input = getInputData();
-    return "" + findXMASesIn2DCollection(input);
+    return "" + findXMASesIn2DCollection(input, false);
   }
-
+  
   @Override
   public String part2() {
-    return "";
+    var input = getInputData();
+    return "" + findXMASesIn2DCollection(input, true);
   }
-
-  private Integer findXMASesIn2DCollection(List<List<Character>> lines) {
+  
+  private Integer findXMASesIn2DCollection(List<List<Character>> grid, boolean realX) {
     int counter = 0;
-    // right to left
-    for (List<Character> row : lines) {
-      for (var index = 0; index <= row.size() - 1; index++) {
-        if (checkXMASAtPos(row, index)) {
-          counter += 1;
-        }
+    for (var x = 0; x < grid.size(); x++) {
+      for (var y = 0; y < grid.getFirst().size(); y++) {
+        counter += realX ? checkXDashMasAtPos(grid, x, y) : checkXMASAtPos(grid, x, y);
       }
     }
-
-    // left to right
-    for (List<Character> row : lines) {
-      row = row.reversed();
-      for (var index = 0; index <= row.size() - 1; index++) {
-        if (checkXMASAtPos(row, index)) {
-          counter += 1;
+    return counter;
+  }
+  
+  private int checkXDashMasAtPos(List<List<Character>> grid, int x, int y) {
+    if (grid.get(x).get(y).equals('A')) {
+      try {
+        if ((
+              grid.get(x - 1).get(y - 1).equals('S') && grid.get(x + 1).get(y + 1).equals('M') ||
+              grid.get(x - 1).get(y - 1).equals('M') && grid.get(x + 1).get(y + 1).equals('S')
+            ) && (
+              grid.get(x - 1).get(y + 1).equals('S') && grid.get(x + 1).get(y - 1).equals('M') ||
+              grid.get(x - 1).get(y + 1).equals('M') && grid.get(x + 1).get(y - 1).equals('S')
+            )) {
+          return 1;
         }
+      } catch (IndexOutOfBoundsException _) {
+      
       }
     }
-
-    // diagonal left to right
-    for (var x = 0; x <= .size() - 1; x++) {
-      checkDiagonalXMASAtPos(lines, x, y);
-    }
-
-    // diagonal right to left
-
-
-    // top to bottom
-    for (var index = 0; index <= lines.size() - 1; index++) {
-      int finalIndex = index;
-      var newRow = lines.stream().map(line -> line.get(finalIndex)).toList();
-      for (var rowIndex = 0; rowIndex < newRow.size(); rowIndex++) {
-        if (checkXMASAtPos(newRow, rowIndex)) {
-          counter += 1;
-        }
-      }
-    }
-
-    // bottom to top
-    for (var index = 0; index <= lines.size() - 1; index++) {
-      int finalIndex = index;
-      var newRow = lines.stream().map(line -> line.get(finalIndex)).toList();
-      newRow = newRow.reversed();
-      for (var rowIndex = 0; rowIndex < newRow.size(); rowIndex++) {
-        if (checkXMASAtPos(newRow, rowIndex)) {
-          counter += 1;
-        }
-      }
-    }
-
-
     return 0;
   }
-
-  private boolean checkXMASAtPos(List<Character> row, Integer index) {
-    try {
-      if (row.get(index) == 'X' && row.get(index + 1) == 'M' && row.get(index + 2) == 'A' && row.get(index + 3) == 'S') {
-        return true;
-      }
-    } catch (IndexOutOfBoundsException e) {
-      return false;
-    }
-    return false;
+  
+  private int checkXMASAtPos(List<List<Character>> grid, int x, int y) {
+    int counter = 0;
+    counter += checkDirection(grid, x, y, 0, 1);
+    counter += checkDirection(grid, x, y, 0, -1);
+    counter += checkDirection(grid, x, y, 1, 0);
+    counter += checkDirection(grid, x, y, -1, 0);
+    counter += checkDirection(grid, x, y, 1, 1);
+    counter += checkDirection(grid, x, y, 1, -1);
+    counter += checkDirection(grid, x, y, -1, 1);
+    counter += checkDirection(grid, x, y, -1, -1);
+    return counter;
   }
-
+  
+  private int checkDirection(List<List<Character>> grid, int x, int y, int deltaX, int deltaY) {
+    StringBuilder word = new StringBuilder();
+    try {
+      for (var i = 0; i < 4; i++) {
+        int newX = x + i * deltaX;
+        int newY = y + i * deltaY;
+        word.append(grid.get(newX).get(newY));
+      }
+    } catch (IndexOutOfBoundsException _) {
+    
+    }
+    return word.toString().equals("XMAS") ? 1 : 0;
+  }
+  
   private List<List<Character>> getInputData() {
     var input = FileReader.readLines("04.txt");
     List<List<Character>> lines = new ArrayList<>();
