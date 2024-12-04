@@ -23,3 +23,14 @@ initial `sort()` and `sort(Collections.reverseOrder())` made me eliminate a chec
 
 I also learned again that `Collection.remove(object)` does not work with a list like this `[1,2,3,3,4]` as there are multiple `3`
 in the collection.  
+
+## Day 3
+
+Regex was king today, making everything easier. I must say I was pretty rusty with remembering how to program patterns. But a quick Google was 
+
+```
+Pattern multiplier = Pattern.compile("mul\\(\\d{1,3},\\d{1,3}\\)|do\\(\\)|don't\\(\\)");
+Matcher matcher = multiplier.matcher(input);
+
+List<String> captureGroups = matcher.results().map(MatchResult::group).toList();
+```
