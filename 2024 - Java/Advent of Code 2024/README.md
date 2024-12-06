@@ -22,15 +22,40 @@ A wild day indeed, I had some difficulty getting up to speed as I was doing some
 initial `sort()` and `sort(Collections.reverseOrder())` made me eliminate a check for going up or down.
 
 I also learned again that `Collection.remove(object)` does not work with a list like this `[1,2,3,3,4]` as there are multiple `3`
-in the collection.  
+in the collection.
 
 ## Day 3
 
-Regex was king today, making everything easier. I must say I was pretty rusty with remembering how to program patterns. But a quick Google was 
+Regex was king today, making everything easier. I must say I was pretty rusty with remembering how to program patterns. But a quick Google was
 
-```
+```java
 Pattern multiplier = Pattern.compile("mul\\(\\d{1,3},\\d{1,3}\\)|do\\(\\)|don't\\(\\)");
 Matcher matcher = multiplier.matcher(input);
 
 List<String> captureGroups = matcher.results().map(MatchResult::group).toList();
 ```
+
+## Day 4
+
+I learned something valuable today, which I don't even know if other people in the Java community know where I work.
+
+What do you think what the next code wil do?
+
+```java
+List<Integer> numbers = new ArrayList<>(List.of(1, 3));
+
+numbers.add(1, 2);
+
+System.out.println(numbers); // will print [1,2,3]
+```
+
+I DIDN'T KNOW! I didn't know that there was an easier way of inserting items in an existing array/list. I normally did this by hand.
+I thought that it will override the current existing index of 1, which was a 3. So this makes programming with insertions a lot easier in the future.
+
+Also instead of doing a lot of if statements and checking positions by hand I wanted to make it a bit smarter and use offsets, and it worked out great in my
+opinion.
+
+## Day 5
+
+Once again I keep forgetting that not every Regex engine uses single escape characters `\|` this for example wouldn't work. You would need two `\\` to make it
+work.
