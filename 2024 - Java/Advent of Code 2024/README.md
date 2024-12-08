@@ -1,7 +1,7 @@
 # Advent of Code 2024 (Java)
 
 I picked Java again because I really need to step up my game with the language I use for work. With this I force myself to
-actually learn some new API's and methods and to also try them out for the first time.
+actually learn some new APIs and methods and to also try them out for the first time.
 
 ## Day 1
 
@@ -26,7 +26,8 @@ in the collection.
 
 ## Day 3
 
-Regex was king today, making everything easier. I must say I was pretty rusty with remembering how to program patterns. But a quick Google was
+Regex was king today, making everything easier. I must say I was pretty rusty with remembering how to program patterns. But a
+quick Google was
 
 ```java
 Pattern multiplier = Pattern.compile("mul\\(\\d{1,3},\\d{1,3}\\)|do\\(\\)|don't\\(\\)");
@@ -49,13 +50,37 @@ numbers.add(1, 2);
 System.out.println(numbers); // will print [1,2,3]
 ```
 
-I DIDN'T KNOW! I didn't know that there was an easier way of inserting items in an existing array/list. I normally did this by hand.
-I thought that it will override the current existing index of 1, which was a 3. So this makes programming with insertions a lot easier in the future.
+I DIDN'T KNOW! I didn't know that there was an easier way of inserting items in an existing array/list. I normally did this by
+hand.
+I thought that it will override the current existing index of 1, which was a 3. So this makes programming with insertions a lot
+easier in the future.
 
-Also instead of doing a lot of if statements and checking positions by hand I wanted to make it a bit smarter and use offsets, and it worked out great in my
+Also instead of doing a lot of if statements and checking positions by hand I wanted to make it a bit smarter and use offsets, and
+it worked out great in my
 opinion.
 
 ## Day 5
 
-Once again I keep forgetting that not every Regex engine uses single escape characters `\|` this for example wouldn't work. You would need two `\\` to make it
+Once again I keep forgetting that not every Regex engine uses single escape characters `\|` this for example wouldn't work. You
+would need two `\\` to make it
 work.
+
+## Day 6
+
+Do you want to reverse a collection? Well you better not use `Collections.reversOrder()` because this will also sort your list,
+without you even wanting it!
+What I was actually look for was the `Collections.reverse(list);` method!
+
+## Day 7
+
+I again was reminded that giving a List in a recursive function would update the list in the above stack as well. Which is
+confusing if you don't know what to look out for.
+And of course the new Switch that we can use in Java:
+```java
+return switch (operator) {
+  case '+' -> left + right;
+  case '*' -> left * right;
+  case '|' -> Long.parseLong(String.format("%s%s", left, right));
+  default -> throw new IllegalStateException("Unexpected value: " + operator);
+};
+```

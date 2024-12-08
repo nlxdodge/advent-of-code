@@ -11,6 +11,19 @@ public class Pair<L, R> {
   }
   
   @Override
+  public boolean equals(Object object) {
+    if(object instanceof Pair pair) {
+      return pair.left.equals(this.left) && pair.right.equals(this.right);
+    }
+    return false;
+  }
+  
+  @Override
+  public int hashCode() {
+    return left.hashCode() + right.hashCode();
+  }
+  
+  @Override
   public String toString() {
     return "Pair<%s, %s>".formatted(left, right);
   }
