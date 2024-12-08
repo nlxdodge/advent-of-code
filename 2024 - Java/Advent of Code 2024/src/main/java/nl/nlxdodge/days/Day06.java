@@ -1,11 +1,3 @@
-/**
- * Day06.java
- * <p>
- * Copyright © 2024 ING Group. All rights reserved.
- * <p>
- * This software is the confidential and proprietary information of ING Group ("Confidential Information").
- */
-
 package nl.nlxdodge.days;
 
 import java.util.ArrayList;
@@ -16,9 +8,7 @@ import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 import nl.nlxdodge.util.Pair;
 
-/**
- * Add class description here
- */
+@SuppressWarnings("unused")
 public class Day06 implements Day {
   
   @Override

@@ -7,6 +7,7 @@ import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 import nl.nlxdodge.util.Pair;
 
+@SuppressWarnings("unused")
 public class Day05 implements Day {
 
   @Override

@@ -84,3 +84,10 @@ return switch (operator) {
   default -> throw new IllegalStateException("Unexpected value: " + operator);
 };
 ```
+
+## Day 8
+Grouping by is something I almost never use at my job. So having to use it again was nice. Especially because it's not too hard to implement.
+
+```java
+var groupedAntennas = antennas.stream().collect(Collectors.groupingBy(x -> x.left));
+```

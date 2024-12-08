@@ -5,6 +5,7 @@ import java.util.List;
 import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 
+@SuppressWarnings("unused")
 public class Day04 implements Day {
   
   @Override

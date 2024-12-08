@@ -1,11 +1,3 @@
-/**
- * Day08.java
- * <p>
- * Copyright © 2024 ING Group. All rights reserved.
- * <p>
- * This software is the confidential and proprietary information of ING Group ("Confidential Information").
- */
-
 package nl.nlxdodge.days;
 
 import java.util.ArrayList;
@@ -18,9 +10,7 @@ import nl.nlxdodge.util.FileReader;
 import nl.nlxdodge.util.GridHelper;
 import nl.nlxdodge.util.Pair;
 
-/**
- * Add class description here
- */
+@SuppressWarnings("unused")
 public class Day08 implements Day {
   
   @Override
@@ -35,7 +25,7 @@ public class Day08 implements Day {
     return "" + calculateAntiNodes(grid, true);
   }
   
-  private int calculateAntiNodes(List<List<Character>> grid, boolean raycast) {
+  private int calculateAntiNodes(List<List<Character>> grid, boolean rayCast) {
     var antennas = findAntennas(grid);
     var groupedAntennas = antennas.stream().collect(Collectors.groupingBy(x -> x.left));
     
@@ -50,25 +40,22 @@ public class Day08 implements Day {
           var diffX = antenna.right.right - crossCheckAntenna.right.right;
           var diffY = antenna.right.left - crossCheckAntenna.right.left;
           
-          boolean outOfBounds = false;
-          if (raycast) {
-            var initialX = antenna.right.right;
-            var initialY = antenna.right.left;
+          boolean inBounds = true;
+          int initialX = antenna.right.right;
+          int initialY = antenna.right.left;
+          if(rayCast) {
             foundAntiNodes.add(new Pair<>(initialY, initialX));
-            while (!outOfBounds) {
-              initialX = initialX + diffX;
-              initialY = initialY + diffY;
-              if (!(initialX >= grid.size() || initialX < 0) && !(initialY >= grid.size() || initialY < 0)) {
-                foundAntiNodes.add(new Pair<>(initialY, initialX));
-              } else {
-                outOfBounds = true;
-              }
+          }
+          while (inBounds) {
+            initialX = initialX + diffX;
+            initialY = initialY + diffY;
+            if (initialX < grid.size() && initialX >= 0 && initialY < grid.size() && initialY >= 0) {
+              foundAntiNodes.add(new Pair<>(initialY, initialX));
+            } else {
+              inBounds = false;
             }
-          } else {
-            var x = diffX + antenna.right.right;
-            var y = diffY + antenna.right.left;
-            if (!(x >= grid.size() || x < 0) && !(y >= grid.size() || y < 0)) {
-              foundAntiNodes.add(new Pair<>(y, x));
+            if(!rayCast) {
+              inBounds = false;
             }
           }
         }
