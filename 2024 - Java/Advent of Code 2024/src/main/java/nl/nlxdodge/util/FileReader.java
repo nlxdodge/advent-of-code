@@ -27,4 +27,17 @@ public class FileReader {
     }
     return lines;
   }
+
+  public static List<List<Character>> get2dList(String day) {
+    var input = FileReader.readLines(day);
+    List<List<Character>> out = new ArrayList<>();
+    for(var i = 0; i < input.size(); i++) {
+      List<Character> row = new ArrayList<>();
+      for (var j = 0; j < input.size(); j++) {
+        row.add(input.get(i).charAt(j));
+      }
+      out.add(row);
+    }
+    return out;
+  }
 }
