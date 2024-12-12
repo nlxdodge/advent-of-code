@@ -44,31 +44,13 @@ public class Day06 implements Day {
     var guardPoss = findGuardPos(grid);
     var guardDelta = new Pair<>(-1, 0);
     var onGrid = true;
-    var lastCorners = new ArrayList<Pair<Integer, Integer>>();
+    var lastCorners = new ArrayList<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>>();
     
     // todo check and re-write to my own
     while (onGrid) {
       onGrid = doGuardStep(grid, guardPoss, guardDelta, lastCorners);
-      if (lastCorners.size() >= 170) {
-        if (lastCorners.contains(guardPoss)) {
-          for (int patternSize = 4; patternSize <= lastCorners.size() / 2; patternSize++) {
-            for (int start = 0; start <= lastCorners.size() - patternSize; start++) {
-              ArrayList<Pair<Integer, Integer>> pattern = new ArrayList<>(lastCorners.subList(start, start + patternSize));
-              int foundPattenrn = 0;
-              for (int i = start + patternSize; i < lastCorners.size(); i += patternSize) {
-                ArrayList<Pair<Integer, Integer>> subList = new ArrayList<>(lastCorners.subList(i, Math.min(i + patternSize, lastCorners.size())));
-                if (pattern.equals(subList)) {
-                  foundPattenrn++;
-                } else {
-                  break;
-                }
-              }
-              if (foundPattenrn >= 2 && (lastCorners.size() - start) % patternSize == 0) {
-                return true;
-              }
-            }
-          }
-        }
+      if(lastCorners.contains(new Pair<>(guardDelta, guardPoss))) {
+        return true;
       }
     }
     
@@ -88,7 +70,7 @@ public class Day06 implements Day {
   }
   
   private boolean doGuardStep(List<List<Character>> grid, Pair<Integer, Integer> guardPoss, Pair<Integer, Integer> guardDelta,
-    List<Pair<Integer, Integer>> lastCorners) {
+      List<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> lastCorners) {
     var nextTurn = new HashMap<Pair<Integer, Integer>, Pair<Integer, Integer>>();
     nextTurn.put(new Pair<>(-1, 0), new Pair<>(0, 1));
     nextTurn.put(new Pair<>(0, 1), new Pair<>(1, 0));
@@ -100,7 +82,7 @@ public class Day06 implements Day {
       Character gridCharacter = grid.get(guardPoss.left + guardDelta.left).get(guardPoss.right + guardDelta.right);
       if (gridCharacter.equals('#') || gridCharacter.equals('@')) {
         if (lastCorners != null) {
-          lastCorners.add(new Pair<>(guardPoss.left, guardPoss.right));
+          lastCorners.add(new Pair<>(new Pair<>(guardDelta.left, guardDelta.right), new Pair<>(guardPoss.left, guardPoss.right)));
         }
         var newDelta = nextTurn.get(guardDelta);
         guardDelta.left = newDelta.left;
