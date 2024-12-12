@@ -1,8 +1,8 @@
 package nl.nlxdodge.days;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 
@@ -12,78 +12,73 @@ public class Day09 implements Day {
   @Override
   public String part1() {
     var disk = getInputData();
-    var newDisk = freeUpSpaceOnDisk(disk);
-    printDisk(newDisk);
+    var newDisk = freeUpSpaceOnDisk(disk, false);
+    return "" + calculateCheckSum(newDisk);
+  }
+  
+  @Override
+  public String part2() {
+    var disk = getInputData();
+    var newDisk = freeUpSpaceOnDisk(disk, true);
     return "" + calculateCheckSum(newDisk);
   }
   
   private long calculateCheckSum(List<Block> newDisk) {
     long index = 0;
     long counter = 0;
+    
     for (int i = 0; i < newDisk.size(); i++) {
       for (int j = 0; j < newDisk.get(i).value(); j++) {
         var block = newDisk.get(i);
-        counter += (long) newDisk.get(i).id() * index;
+        var blockId = block.id();
+        if (block.isEmpty()) {
+          break;
+        }
+        counter += (long) blockId * index;
         index += 1;
       }
     }
     return counter;
   }
   
-  private List<Block> freeUpSpaceOnDisk(List<Block> disk) {
-    var formattedBlocks = new ArrayList<>(disk);
-    for (int formattedIndex = 0; formattedIndex < formattedBlocks.size(); formattedIndex++) {
-      if (formattedBlocks.get(formattedIndex).isEmpty()) {
-        var toFill = formattedBlocks.get(formattedIndex).value();
-        Block foundBlock;
+  private List<Block> freeUpSpaceOnDisk(List<Block> disk, boolean skipToBig) {
+    var workingDisk = new ArrayList<>(disk);
+    for (int readingIndex = workingDisk.size() - 1; readingIndex >= 0; readingIndex--) {
+      int emptyIndex = getFirstFreeSpace(workingDisk);
+      if (emptyIndex == -1) {
+        break;
+      }
+      Block readingBlock = workingDisk.get(readingIndex);
+      Block emptyBlock = workingDisk.get(getFirstFreeSpace(workingDisk));
+      if (!readingBlock.isEmpty()) {
+        printDisk(workingDisk);
         
-        while (toFill != 0) {
-          for (int readingIndex = formattedBlocks.size() - 1; readingIndex >= 0; readingIndex--) {
-            foundBlock = formattedBlocks.get(readingIndex);
-            if(readingIndex < formattedIndex) {
-              toFill = 0;
-              break;
-            }
-            
-            if (!foundBlock.isEmpty()) {
-              if (foundBlock.value() <= toFill) {
-                formattedBlocks.set(readingIndex, new Block(foundBlock.id(), 0, false));
-                if (formattedBlocks.get(formattedIndex).isEmpty()) {
-                  formattedBlocks.set(formattedIndex, new Block(foundBlock.id(), foundBlock.value(), false));
-                } else {
-                  formattedBlocks.add(formattedIndex + 1, new Block(foundBlock.id(), foundBlock.value(), false));
-                }
-                toFill -= foundBlock.value();
-              } else {
-                formattedBlocks.set(readingIndex,
-                  new Block(foundBlock.id(), formattedBlocks.get(readingIndex).value() - toFill, false));
-                if (formattedBlocks.get(formattedIndex).isEmpty()) {
-                  formattedBlocks.set(formattedIndex,
-                    new Block(foundBlock.id(), toFill, false));
-                } else {
-                  formattedBlocks.add(formattedIndex + 1,
-                    new Block(foundBlock.id(), toFill, false));
-                }
-                toFill = 0;
-                break;
-              }
-            }
-          }
+        var delta = readingBlock.value() - emptyBlock.value();
+        if (delta == 0) {
+          workingDisk.set(emptyIndex, new Block(readingBlock.id(), readingBlock.value(), false));
+          workingDisk.set(readingIndex, new Block(-1, -1, true));
+        } else if (delta < 0) {
+          workingDisk.add(emptyIndex, new Block(readingBlock.id(), readingBlock.value(), false));
+          workingDisk.set(emptyIndex + 1, new Block(readingBlock.id(), -delta, true));
+          workingDisk.set(readingIndex + 1, new Block(-1, -1, true));
+          readingIndex++;
+        } else if (!skipToBig) {
+          workingDisk.set(emptyIndex, new Block(readingBlock.id(), readingBlock.value() - delta, false));
+          workingDisk.set(readingIndex, new Block(readingBlock.id(), delta, false));
         }
       }
     }
-    return formattedBlocks;
+    return workingDisk;
   }
   
-  @Override
-  public String part2() {
-    return "";
+  private int getFirstFreeSpace(List<Block> disk) {
+    return IntStream.range(0, disk.size()).filter(d -> disk.get(d).isEmpty()).findFirst().orElse(-1);
   }
+  
   
   private List<Block> getInputData() {
     var input = FileReader.readLines("09.txt");
     List<Block> diskMap = new ArrayList<>();
-    
     int idCounter = 0;
     boolean write = true;
     for (String line : input.getFirst().split("")) {
@@ -93,7 +88,6 @@ public class Day09 implements Day {
       }
       write = !write;
     }
-//    printDisk(diskMap);
     return diskMap;
   }
   
