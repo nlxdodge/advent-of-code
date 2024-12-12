@@ -50,8 +50,8 @@ public class Day09 implements Day {
       }
       Block readingBlock = workingDisk.get(readingIndex);
       Block emptyBlock = workingDisk.get(getFirstFreeSpace(workingDisk));
+      printDisk(workingDisk);
       if (!readingBlock.isEmpty()) {
-        printDisk(workingDisk);
         
         var delta = readingBlock.value() - emptyBlock.value();
         if (delta == 0) {
@@ -65,6 +65,7 @@ public class Day09 implements Day {
         } else if (!skipToBig) {
           workingDisk.set(emptyIndex, new Block(readingBlock.id(), readingBlock.value() - delta, false));
           workingDisk.set(readingIndex, new Block(readingBlock.id(), delta, false));
+          readingIndex++;
         }
       }
     }
