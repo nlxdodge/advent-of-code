@@ -4,71 +4,73 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
+
 import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 import nl.nlxdodge.util.Pair;
+import nl.nlxdodge.util.Timer;
 
 @SuppressWarnings("unused")
 public class Day06 implements Day {
-  
+
   @Override
   public String part1() {
     var grid = getInputData();
-    
-    grid = iterateGuardUntilGone(grid);
-    
+
+    iterateGuardUntilGone(grid);
+
     return "" + grid.stream().flatMap(Collection::stream).filter(character -> character.equals('X')).count();
   }
-  
+
   @Override
   public String part2() {
     var grid = getInputData();
-    var counter = 0;
-    
-    for (var x = 0; x < grid.size(); x++) {
-      for (var y = 0; y < grid.size(); y++) {
-        var gridCopy = getInputData();
-        if (gridCopy.get(x).get(y).equals('.')) {
-          gridCopy.get(x).set(y, '@');
-          if (guardStuckInLoop(gridCopy)) {
-            counter++;
-          }
+    var checkGrid = iterateGuardUntilGone(new ArrayList<>(grid));
+    var counter = new AtomicInteger();
+
+    IntStream.range(0, grid.size()).parallel().forEach(x -> IntStream.range(0, grid.size()).parallel().forEach(y -> {
+      var gridCopy = getInputData();
+      if (gridCopy.get(x).get(y).equals('.') && checkGrid.get(x).get(y).equals('X')) {
+        gridCopy.get(x).set(y, '@');
+        if (guardStuckInLoop(gridCopy)) {
+          counter.set(counter.get() + 1);
         }
       }
-    }
-    
+    }));
+
     return "" + counter;
   }
-  
+
   private boolean guardStuckInLoop(List<List<Character>> grid) {
     var guardPoss = findGuardPos(grid);
     var guardDelta = new Pair<>(-1, 0);
-    var onGrid = true;
     var lastCorners = new ArrayList<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>>();
-    
-    // todo check and re-write to my own
+    var onGrid = true;
+
     while (onGrid) {
       onGrid = doGuardStep(grid, guardPoss, guardDelta, lastCorners);
-      if(lastCorners.contains(new Pair<>(guardDelta, guardPoss))) {
+      if (lastCorners.contains(new Pair<>(guardDelta, guardPoss))) {
         return true;
       }
     }
-    
+
     return false;
   }
-  
+
   private List<List<Character>> iterateGuardUntilGone(List<List<Character>> grid) {
     var guardPoss = findGuardPos(grid);
     var guardDelta = new Pair<>(-1, 0);
     var onGrid = true;
-    
+
     while (onGrid) {
       onGrid = doGuardStep(grid, guardPoss, guardDelta, null);
     }
-    
+
     return grid;
   }
-  
+
   private boolean doGuardStep(List<List<Character>> grid, Pair<Integer, Integer> guardPoss, Pair<Integer, Integer> guardDelta,
       List<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> lastCorners) {
     var nextTurn = new HashMap<Pair<Integer, Integer>, Pair<Integer, Integer>>();
@@ -76,7 +78,7 @@ public class Day06 implements Day {
     nextTurn.put(new Pair<>(0, 1), new Pair<>(1, 0));
     nextTurn.put(new Pair<>(1, 0), new Pair<>(0, -1));
     nextTurn.put(new Pair<>(0, -1), new Pair<>(-1, 0));
-    
+
     try {
       grid.get(guardPoss.left).set(guardPoss.right, 'X');
       Character gridCharacter = grid.get(guardPoss.left + guardDelta.left).get(guardPoss.right + guardDelta.right);
@@ -97,7 +99,7 @@ public class Day06 implements Day {
       return false;
     }
   }
-  
+
   private Pair<Integer, Integer> findGuardPos(List<List<Character>> grid) {
     for (var i = 0; i < grid.size(); i++) {
       for (var j = 0; j < grid.size(); j++) {
@@ -108,7 +110,7 @@ public class Day06 implements Day {
     }
     throw new RuntimeException("Guard not found");
   }
-  
+
   private void p(List<List<Character>> g) {
     for (int i = 0; i < g.size(); i++) {
       for (int j = 0; j < g.size(); j++) {
@@ -118,8 +120,8 @@ public class Day06 implements Day {
     }
     System.out.println("");
   }
-  
-  
+
+
   private List<List<Character>> getInputData() {
     var input = FileReader.readLines("06.txt");
     List<List<Character>> out = new ArrayList<>();
