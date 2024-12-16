@@ -3,30 +3,31 @@ package nl.nlxdodge.days;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
 import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 
 @SuppressWarnings("unused")
 public class Day09 implements Day {
-  
+
   @Override
   public String part1() {
     var disk = getInputData();
     var newDisk = freeUpSpaceOnDisk(disk, false);
     return "" + calculateCheckSum(newDisk);
   }
-  
+
   @Override
   public String part2() {
     var disk = getInputData();
     var newDisk = freeUpSpaceOnDisk(disk, true);
     return "" + calculateCheckSum(newDisk);
   }
-  
+
   private long calculateCheckSum(List<Block> newDisk) {
     long index = 0;
     long counter = 0;
-    
+
     for (int i = 0; i < newDisk.size(); i++) {
       for (int j = 0; j < newDisk.get(i).value(); j++) {
         var block = newDisk.get(i);
@@ -40,43 +41,45 @@ public class Day09 implements Day {
     }
     return counter;
   }
-  
+
   private List<Block> freeUpSpaceOnDisk(List<Block> disk, boolean skipToBig) {
-    var workingDisk = new ArrayList<>(disk);
-    for (int readingIndex = workingDisk.size() - 1; readingIndex >= 0; readingIndex--) {
-      int emptyIndex = getFirstFreeSpace(workingDisk);
-      if (emptyIndex == -1) {
-        break;
-      }
-      Block readingBlock = workingDisk.get(readingIndex);
-      Block emptyBlock = workingDisk.get(getFirstFreeSpace(workingDisk));
-      printDisk(workingDisk);
+    int emptyIndex = getFirstFreeSpace(disk);
+    int fullIndex = getLastFullSpace(disk);
+    while (emptyIndex != -1 || fullIndex != -1 || emptyIndex > fullIndex) {
+      emptyIndex = getFirstFreeSpace(disk);
+      fullIndex = getLastFullSpace(disk);
+      Block readingBlock = disk.get(fullIndex);
+      Block emptyBlock = disk.get(getFirstFreeSpace(disk));
+      printDisk(disk);
       if (!readingBlock.isEmpty()) {
-        
         var delta = readingBlock.value() - emptyBlock.value();
         if (delta == 0) {
-          workingDisk.set(emptyIndex, new Block(readingBlock.id(), readingBlock.value(), false));
-          workingDisk.set(readingIndex, new Block(-1, -1, true));
+          disk.set(emptyIndex, new Block(readingBlock.id(), readingBlock.value(), false));
+          disk.set(fullIndex, new Block(-1, -1, true));
         } else if (delta < 0) {
-          workingDisk.add(emptyIndex, new Block(readingBlock.id(), readingBlock.value(), false));
-          workingDisk.set(emptyIndex + 1, new Block(readingBlock.id(), -delta, true));
-          workingDisk.set(readingIndex + 1, new Block(-1, -1, true));
-          readingIndex++;
+          disk.add(emptyIndex, new Block(readingBlock.id(), readingBlock.value(), false));
+          disk.set(emptyIndex + 1, new Block(readingBlock.id(), -delta, true));
+          disk.set(fullIndex + 1, new Block(-1, -1, true));
+          fullIndex++;
         } else if (!skipToBig) {
-          workingDisk.set(emptyIndex, new Block(readingBlock.id(), readingBlock.value() - delta, false));
-          workingDisk.set(readingIndex, new Block(readingBlock.id(), delta, false));
-          readingIndex++;
+          disk.set(emptyIndex, new Block(readingBlock.id(), readingBlock.value() - delta, false));
+          disk.set(fullIndex, new Block(readingBlock.id(), delta, false));
+          fullIndex++;
         }
       }
     }
-    return workingDisk;
+    return disk;
   }
-  
+
+  private int getLastFullSpace(List<Block> disk) {
+    return IntStream.range(0, disk.size()).filter(d -> !disk.get(d).isEmpty()).findFirst().orElse(-1);
+  }
+
   private int getFirstFreeSpace(List<Block> disk) {
     return IntStream.range(0, disk.size()).filter(d -> disk.get(d).isEmpty()).findFirst().orElse(-1);
   }
-  
-  
+
+
   private List<Block> getInputData() {
     var input = FileReader.readLines("09.txt");
     List<Block> diskMap = new ArrayList<>();
@@ -91,7 +94,7 @@ public class Day09 implements Day {
     }
     return diskMap;
   }
-  
+
   private void printDisk(List<Block> blocks) {
     for (Block block : blocks) {
       for (int i = 0; i < block.value(); i++) {
