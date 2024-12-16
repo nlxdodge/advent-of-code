@@ -3,31 +3,30 @@ package nl.nlxdodge.days;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import nl.nlxdodge.util.Day;
 import nl.nlxdodge.util.FileReader;
 
 @SuppressWarnings("unused")
 public class Day09 implements Day {
-
+  
   @Override
   public String part1() {
     var disk = getInputData();
     var newDisk = freeUpSpaceOnDisk(disk, false);
     return "" + calculateCheckSum(newDisk);
   }
-
+  
   @Override
   public String part2() {
     var disk = getInputData();
     var newDisk = freeUpSpaceOnDisk(disk, true);
     return "" + calculateCheckSum(newDisk);
   }
-
+  
   private long calculateCheckSum(List<Block> newDisk) {
     long index = 0;
     long counter = 0;
-
+    
     for (int i = 0; i < newDisk.size(); i++) {
       for (int j = 0; j < newDisk.get(i).value(); j++) {
         var block = newDisk.get(i);
@@ -41,15 +40,20 @@ public class Day09 implements Day {
     }
     return counter;
   }
-
+  
   private List<Block> freeUpSpaceOnDisk(List<Block> disk, boolean skipToBig) {
     int emptyIndex = getFirstFreeSpace(disk);
-    int fullIndex = getLastFullSpace(disk);
-    while (emptyIndex != -1 || fullIndex != -1 || emptyIndex > fullIndex) {
+    Block emptyBlock = disk.get(getFirstFreeSpace(disk));
+    int fullIndex = getLastFullSpace(disk, emptyBlock.value(), skipToBig);
+    if (emptyIndex == -1 || fullIndex == -1) {
+      return disk;
+    }
+    
+    while (emptyIndex < fullIndex) {
       emptyIndex = getFirstFreeSpace(disk);
-      fullIndex = getLastFullSpace(disk);
       Block readingBlock = disk.get(fullIndex);
-      Block emptyBlock = disk.get(getFirstFreeSpace(disk));
+      emptyBlock = disk.get(getFirstFreeSpace(disk));
+      fullIndex = getLastFullSpace(disk, emptyBlock.value(), skipToBig);
       printDisk(disk);
       if (!readingBlock.isEmpty()) {
         var delta = readingBlock.value() - emptyBlock.value();
@@ -58,7 +62,7 @@ public class Day09 implements Day {
           disk.set(fullIndex, new Block(-1, -1, true));
         } else if (delta < 0) {
           disk.add(emptyIndex, new Block(readingBlock.id(), readingBlock.value(), false));
-          disk.set(emptyIndex + 1, new Block(readingBlock.id(), -delta, true));
+          disk.set(emptyIndex + 1, new Block(emptyBlock.id(), -delta, true));
           disk.set(fullIndex + 1, new Block(-1, -1, true));
           fullIndex++;
         } else if (!skipToBig) {
@@ -70,16 +74,26 @@ public class Day09 implements Day {
     }
     return disk;
   }
-
-  private int getLastFullSpace(List<Block> disk) {
-    return IntStream.range(0, disk.size()).filter(d -> !disk.get(d).isEmpty()).findFirst().orElse(-1);
+  
+  private int getLastFullSpace(List<Block> disk, int size, boolean skipToBig) {
+    for (int i = disk.size() - 1; i > 0; i--) {
+      if (!disk.get(i).isEmpty()) {
+        if (!skipToBig) {
+          return i;
+        }
+        if (disk.get(i).value() < size) {
+          return i;
+        }
+      }
+    }
+    return -1;
   }
-
+  
   private int getFirstFreeSpace(List<Block> disk) {
     return IntStream.range(0, disk.size()).filter(d -> disk.get(d).isEmpty()).findFirst().orElse(-1);
   }
-
-
+  
+  
   private List<Block> getInputData() {
     var input = FileReader.readLines("09.txt");
     List<Block> diskMap = new ArrayList<>();
@@ -94,7 +108,7 @@ public class Day09 implements Day {
     }
     return diskMap;
   }
-
+  
   private void printDisk(List<Block> blocks) {
     for (Block block : blocks) {
       for (int i = 0; i < block.value(); i++) {
