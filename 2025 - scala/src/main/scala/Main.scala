@@ -1,5 +1,5 @@
 @main def dayRunner(): Unit = {
-  val dayNum = 3
+  val dayNum = 4
   try {
     val dayClass = Class.forName(s"day.AOC$dayNum")
     val instance = dayClass.getDeclaredConstructor().newInstance().asInstanceOf[day.Day]
